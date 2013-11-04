@@ -21,13 +21,6 @@ namespace test
             );
 
             routes.MapRoute(
-                name: "Another Calendar",
-                url: "Calendar/{bandId}/{month}/{year}",
-                defaults: new { controller = "Calendar", action = "Index" },
-                constraints: new { bandId = @"\d+", month = @"\d+", year = @"\d+" }
-            );
-
-            routes.MapRoute(
                 name: "Events for Month",
                 url: "Calendar/EventsForMonth/{bandId}/{month}/{year}",
                 defaults: new { controller = "Calendar", action = "EventsForMonth" },
