@@ -1,0 +1,12 @@
+﻿@model IEnumerable<test.Models.MemberModel>
+
+<table class="pretty" border="0" cellpadding="0" cellspacing="0">
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.BandId)</td>
+            <td>@Html.DisplayFor(modelItem => item.BandName)</td>
+        </tr>
+    }
+
+</table>
