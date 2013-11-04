@@ -579,33 +579,16 @@ th {
         content: '▼';
     }
 
-td 
-{
+td {
     padding: 0.25em 2em 0.25em 0em;
     border: 0 none;
 }
 
-tr.pager td 
-{
+tr.pager td {
     padding: 0 0.25em 0 0;
 }
 
 /* MIKE'S CSS ADDITIONS */
-
-ol.bands
-{
-    padding: 0;
-    margin: 0;
-}
-
-ol.bands li
-{
-    border: 1px solid #C3C3C3;
-    list-style-type: none;
-    padding: 12px;
-    margin-bottom: 20px;
-    background: white;
-}
 
 ol.messages
 {
