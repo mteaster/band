@@ -1,0 +1,31 @@
+﻿@model test.Models.RegisterModel
+
+@{
+    ViewBag.Title = "Home";
+}
+
+@section featured 
+{
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>hi.</h1>
+                <h2>welcome to bandit.</h2>
+            </hgroup>
+        </div>
+    </section>
+}
+
+@if (Request.IsAuthenticated)
+{
+    Html.RenderAction("Bands", "Band");
+}
+else
+{
+    @Html.Partial("_LandingPartial")
+}
+
+@section Scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}
