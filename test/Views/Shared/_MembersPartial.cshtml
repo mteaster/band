@@ -4,10 +4,7 @@
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td>@Html.DisplayFor(modelItem => item.MemberUserName)</td>
-            <td>@Html.DisplayFor(modelItem => item.MemberDisplayName)</td>
-        </tr>
+        <li>@Html.DisplayFor(modelItem => item.MemberDisplayName)</li>
     }
 
 </ul>
