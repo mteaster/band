@@ -622,7 +622,8 @@ ul.horizontal li
 
 section.blarg
 {
-    width: 45%;
+    float: left;
+    width: 48%;   
     padding-right: 10px;
 }
 
