@@ -1,7 +1,15 @@
+<<<<<<< HEAD
 ﻿using System.Web.Mvc;
 using band.Models;
 using band.Stuff;
 using WebMatrix.WebData;
+=======
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+>>>>>>> dd962774445a69b12a838f55de74fe554db5ac39
 
 namespace band.Content
 {
@@ -10,6 +18,7 @@ namespace band.Content
         //
         // GET: /FileCabinet/
 
+<<<<<<< HEAD
         public ActionResult Index(int bandId)
         {
             // Check if band exists - if it does, get band profile
@@ -23,6 +32,10 @@ namespace band.Content
             {
                 return RedirectToAction("Join", "Band");
             }
+=======
+        public ActionResult Index()
+        {
+>>>>>>> dd962774445a69b12a838f55de74fe554db5ac39
             return View();
         }
 

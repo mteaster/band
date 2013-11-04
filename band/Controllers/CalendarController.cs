@@ -1,8 +1,15 @@
 ﻿using System;
+<<<<<<< HEAD
 using System.Web.Mvc;
 using band.Models;
 using band.Stuff;
 using WebMatrix.WebData;
+=======
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+>>>>>>> dd962774445a69b12a838f55de74fe554db5ac39
 
 namespace band.Controllers
 {
@@ -11,6 +18,7 @@ namespace band.Controllers
         //
         // GET: /Calendar/
 
+<<<<<<< HEAD
         public ActionResult Index(int bandId)
         {
             // Check if band exists - if it does, get band profile
@@ -88,5 +96,12 @@ namespace band.Controllers
 
             return View(model);
         }
+=======
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+>>>>>>> dd962774445a69b12a838f55de74fe554db5ac39
     }
 }

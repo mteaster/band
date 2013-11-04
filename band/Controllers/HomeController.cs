@@ -9,8 +9,12 @@ namespace band.Controllers
     {
         public ActionResult Index()
         {
+<<<<<<< HEAD
             return View();
         }
+=======
+            ViewBag.Message = "Login or Create and Join a Band";
+>>>>>>> dd962774445a69b12a838f55de74fe554db5ac39
 
         // TEST ONLY
 
@@ -23,11 +27,15 @@ namespace band.Controllers
         [ChildActionOnly]
         public ActionResult UserList()
         {
+<<<<<<< HEAD
             using (DatabaseContext database = new DatabaseContext())
             {
                 return PartialView("_UserListPartial", database.UserProfiles.ToList());
             }
         }
+=======
+            ViewBag.Message = "About This App.";
+>>>>>>> dd962774445a69b12a838f55de74fe554db5ac39
 
         [ChildActionOnly]
         public ActionResult BandList()
@@ -38,11 +46,15 @@ namespace band.Controllers
         // This is where I play around with stuff
         public ActionResult Test()
         {
+<<<<<<< HEAD
             ViewBag.StatusMessage = "what am i doing here";
             
             //WebSecurity.CreateUserAndAccount("admin", "password", new { DisplayName = "admin" });
             //Roles.CreateRole("Administrator");
             //Roles.AddUserToRole("admin", "Administrator");
+=======
+            ViewBag.Message = "Contact the CREATORS!!!.";
+>>>>>>> dd962774445a69b12a838f55de74fe554db5ac39
 
             return View();
         }

@@ -177,6 +177,15 @@
     <Compile Include="Controllers\RolodexController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Filters\TestFilters.cs" />
+    <Compile Include="Controllers\FileCabinetController.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BudgetController.cs" />
+    <Compile Include="Controllers\CalendarController.cs" />
+    <Compile Include="Controllers\DashboardController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OnlineController.cs" />
+    <Compile Include="Controllers\RolodexController.cs" />
+    <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -265,7 +274,9 @@
     <Content Include="Scripts\knockout-2.1.0.debug.js" />
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -331,6 +342,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Calendar\Index.cshtml" />
+    <Content Include="Views\Dashboard\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Rolodex\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\FileCabinet\Index.cshtml" />
@@ -401,6 +416,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Dashboard\EditPost.cshtml" />
+    <Content Include="Views\Budget\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Calendar\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -419,6 +438,7 @@
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>55896</DevelopmentServerPort>
+          <DevelopmentServerPort>56113</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>
