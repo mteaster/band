@@ -24,7 +24,12 @@
 </article>
 
 <aside>
-    @{ Html.RenderAction("Members", "Band", new { bandId = ViewBag.BandId }); };
+    <hgroup class="title">
+        <h1>Members.</h1>
+        <h2>Here they are.</h2>
+    </hgroup>
+
+    @{ Html.RenderAction("Members", "Band", new { bandId = ViewBag.BandId }); }
 </aside>
 
 @section scripts
