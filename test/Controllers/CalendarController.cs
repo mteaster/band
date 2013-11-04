@@ -48,6 +48,11 @@ namespace band.Controllers
             return View();
         }
 
+        public ActionResult EventsForMonth(int bandId, int month)
+        {
+            return View(CalendarUtil.EventsForMonth(bandId, month));
+        }
+
         //
         // Post: /Calendar/AddEvent
 
@@ -82,7 +87,7 @@ namespace band.Controllers
                     database.SaveChanges();
                 }
 
-                ViewBag.StatusMessage = "we added a calendar event and nothing broke";
+                ViewBag.SuccessMessage = "we added a calendar event and nothing broke";
                 return View("Success");
             }
 
