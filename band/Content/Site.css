@@ -62,6 +62,7 @@ h1, h2, h3,
 h4, h5, h6 {
     color: #000;
     margin-bottom: 0;
+    margin-top: 0;
     padding-bottom: 0;
 }
 
@@ -330,7 +331,6 @@ aside {
 
 /* login page */
 #loginForm {
-    border-right: solid 2px #c8c8c8;
     float: left;
     width: 55%;
 }
@@ -477,15 +477,17 @@ textarea {
     padding: 10px 20px;
 }
 
-.message-error {
+.message-error
+{
     clear: both;
     color: #e80c4d;
-    font-size: 1.1em;
+    font-size: 1.3em;
     font-weight: bold;
     margin: 20px 0 10px 0;
 }
 
-.message-success {
+.message-success 
+{
     color: #7ac0da;
     font-size: 1.3em;
     font-weight: bold;
@@ -577,15 +579,119 @@ th {
         content: '▼';
     }
 
-td {
+td 
+{
     padding: 0.25em 2em 0.25em 0em;
     border: 0 none;
 }
 
-tr.pager td {
+tr.pager td 
+{
     padding: 0 0.25em 0 0;
 }
 
+/* MIKE'S CSS ADDITIONS */
+
+ol.bands
+{
+    padding: 0;
+    margin: 0;
+}
+
+ol.bands li
+{
+    border: 1px solid #C3C3C3;
+    list-style-type: none;
+    padding: 12px;
+    margin-bottom: 20px;
+    background: white;
+}
+
+ol.messages
+{
+    padding: 0;
+    margin: 0;   
+}
+
+ol.messages li
+{
+    border: 1px solid #C3C3C3;
+    list-style-type: none;
+    padding: 12px;
+    margin-bottom: 20px;
+    background: white;
+}
+
+ul.horizontal
+{
+    padding: 0;
+    margin: 0;
+}
+
+ul.horizontal li
+{
+    display: inline;
+    list-style-type: none;
+    padding-right: 10px;
+}   
+
+section.half
+{
+    float: left;
+    width: 50%;
+}
+
+span.messageBoardName
+{
+    color: #000000;
+    font-size: 1.2em;
+}
+
+div.messageBoardMessage 
+{
+    padding: 10px 0;
+}
+
+span.messageBoardTime 
+{
+    font-weight: normal;
+    font-size: small;
+}
+
+a.messageBoardLink
+{
+    padding: 0 3px 0 0;
+}
+
+table.pretty
+{
+    background-color: #FFFFFF;
+    border: 1px solid #C3C3C3;
+    border-collapse: collapse;
+    margin-top: 0.75em;
+    margin-bottom: 0.75em;
+}
+
+table.pretty td
+{
+    border: 1px solid #C3C3C3;
+    padding: 5px;
+    vertical-align: top;
+}
+
+table.pretty th
+{
+    border: 1px solid #C3C3C3;
+    padding: 5px;
+    vertical-align: top;
+	text-align: left;
+	font-weight: bold;
+}
+
+li.right
+{
+    float: right;
+}
 
 /********************
 *   Mobile Styles   *
@@ -753,4 +859,12 @@ tr.pager td {
         footer p {
             margin: 0;
         }
+
+    /* MIKE'S MOBILE ADDITIONS */
+
+    section.half
+    {
+        float: left;
+        width: 100%;
+    }
 }

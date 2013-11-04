@@ -1,0 +1,26 @@
+﻿@model test.Models.BandPasswordModel
+
+@{
+    ViewBag.Title = "Manage '" + ViewBag.BandName + "'";
+}
+
+<hgroup class="title">
+    <h1>@ViewBag.Title.</h1>
+</hgroup>
+
+<p class="message-success">@ViewBag.SuccessMessage</p>
+<p class="message-error">@ViewBag.ErrorMessage</p>
+
+<section class="half">
+    @Html.Partial("_ChangeBandPasswordPartial")
+</section>
+<section class="half">
+    @Html.Partial("_ChangeBandNamePartial")
+    <br />
+    @Html.ActionLink("Delete", "Delete", new { bandId = ViewBag.BandId })
+</section>
+
+@section Scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}

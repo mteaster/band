@@ -1,0 +1,30 @@
+﻿@model IEnumerable<test.Models.MessageBoardPostModel>
+
+<h2>Messages</h2>
+
+@if (Model != null && Model.Any())
+{
+    <ol class="messages">
+        @foreach (var item in Model)
+        {
+            <li id="post-container-@item.PostId">
+                <div class="post" id="post-@item.PostId">
+                    <span class="messageBoardName">@Html.DisplayFor(modelItem => item.PosterName)</span><br />
+                    <span class="messageBoardTime">@Html.DisplayFor(modelItem => item.PostTime)</span><br />
+
+                    <div id="post-content-@item.PostId" class="messageBoardMessage">@Html.Raw(item.Content)</div>
+
+                    @if (item.PosterId == WebSecurity.CurrentUserId)
+                    {
+                        <a class="messageBoardLink" href="javascript:initiateEdit(@item.PostId);">Edit</a>
+                        @Html.ActionLink("Delete", "DeletePost", "Dashboard", new { PostId = item.PostId }, new { @class = "messageBoardLink" })
+                    }    
+                </div>
+            </li>
+        }
+    </ol>
+}
+else
+{
+    <span>No messages found</span>
+}

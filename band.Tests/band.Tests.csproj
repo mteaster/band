@@ -6,11 +6,11 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{CD18CD56-7516-4EBA-A4DA-17DEBD91C711}</ProjectGuid>
+    <ProjectGuid>{AF689A53-83A5-4B0F-9254-74D8BC7772A0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>band.Tests</RootNamespace>
-    <AssemblyName>band.Tests</AssemblyName>
+    <AssemblyName>test.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -107,8 +107,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\band\band.csproj">
-      <Project>{524BC331-7F2F-41DF-A166-0487193F961C}</Project>
+    <ProjectReference Include="..\test\band.csproj">
+      <Project>{FD716CC1-F69E-4BA2-8D91-E98697442282}</Project>
       <Name>band</Name>
     </ProjectReference>
   </ItemGroup>

@@ -1,43 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity;
-using System.Globalization;
 using System.Web.Mvc;
-using System.Web.Security;
 
 namespace band.Models
 {
-    public class UsersContext : DbContext
-    {
-        public UsersContext()
-            : base("DefaultConnection")
-        {
-        }
-
-        public DbSet<UserProfile> UserProfiles { get; set; }
-    }
-
     [Table("UserProfile")]
     public class UserProfile
     {
         [Key]
+        [Display(Name = "ID")]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int UserId { get; set; }
+
+        [Required]
+        [Display(Name = "User")]
         public string UserName { get; set; }
+
+        [Required]
+        [Display(Name = "Name")]
+        public string DisplayName { get; set; }
     }
 
-    public class RegisterExternalLoginModel
+    public class ChangeDisplayNameModel
     {
         [Required]
-        [Display(Name = "User name")]
-        public string UserName { get; set; }
-
-        public string ExternalLoginData { get; set; }
+        [Display(Name = "Display name")]
+        public string DisplayName { get; set; }
     }
 
-    public class LocalPasswordModel
+    public class UserPasswordModel
     {
         [Required]
         [DataType(DataType.Password)]
@@ -74,7 +65,13 @@ namespace band.Models
     public class RegisterModel
     {
         [Required]
+        [Display(Name = "Display name")]
+        public string DisplayName { get; set; }
+
+        [Required]
         [Display(Name = "User name")]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 3)]
+        [RegularExpression(@"(\S)+", ErrorMessage = "Your {0} can't contain spaces.")]
         public string UserName { get; set; }
 
         [Required]
@@ -87,12 +84,5 @@ namespace band.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
-    }
-
-    public class ExternalLogin
-    {
-        public string Provider { get; set; }
-        public string ProviderDisplayName { get; set; }
-        public string ProviderUserId { get; set; }
     }
 }

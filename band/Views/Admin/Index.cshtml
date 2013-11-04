@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "Admin Page";
+}
+
+@section featured 
+{
+    @Html.Partial("_AdminHeaderPartial")
+}
+
+<section class="half">
+    <hgroup class="title">
+        <h1>Bands.</h1>
+        <h2>Here are all the bands.</h2>
+    </hgroup>
+
+    @{ Html.RenderAction("BandList", "Home"); }
+</section>
+
+<section class="half">
+    <hgroup class="title">
+        <h1>Users.</h1>
+        <h2>Here are all the users.</h2>
+    </hgroup>
+
+    @{ Html.RenderAction("UserList", "Home"); }
+</section>
