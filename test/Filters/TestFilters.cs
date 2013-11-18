@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Web.Mvc;
 using test.Models;
@@ -11,7 +12,6 @@ namespace test.Filters
     {
         private Stopwatch stopWatch = new Stopwatch();
 
-
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
@@ -20,7 +20,6 @@ namespace test.Filters
 
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
-
             if (filterContext.HttpContext.Items["Stopwatch"] != null)
             {
                 Stopwatch stopwatch = (Stopwatch)filterContext.HttpContext.Items["Stopwatch"];
@@ -31,15 +30,17 @@ namespace test.Filters
                     filterContext.ActionDescriptor.ActionName,
                     stopwatch.ElapsedMilliseconds);
 
-                using (DatabaseContext database = new DatabaseContext())
-                {
-                    Log log = new Log();
-                    log.LogMessage = message;
-                    log.LogTime = DateTime.UtcNow;
+                string path = filterContext.HttpContext.Server.MapPath("~/App_Data/Log.txt");
 
-                    database.Logs.Add(log);
-                    database.SaveChanges();
+                if (!File.Exists(path)) 
+                {
+                    File.Create(path);
                 }
+
+                using (StreamWriter sw = File.AppendText(path)) 
+                {
+                    sw.WriteLine(message);
+                }	
 
                 filterContext.HttpContext.Items.Remove("Stopwatch");
             }

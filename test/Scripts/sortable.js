@@ -2,12 +2,10 @@ var sortableApp = angular.module("sortable", []);
 
 sortableApp.controller('SortableController', function FilesController($scope, $http)
 {
-    console.log("running controller");
-
     $scope.data = [];
+
     $scope.init = function (url)
     {
-        console.log(url);
         $http({ method: 'GET', url: url }).success(function (data) { $scope.data = data; });
     };
 
@@ -25,7 +23,5 @@ sortableApp.controller('SortableController', function FilesController($scope, $h
             $scope.column = column;
             $scope.descending = false;
         }
-
-        console.log("sorting by column " + $scope.column + ", " + ($scope.descending ? "descending" : "ascending"));
     };
 });

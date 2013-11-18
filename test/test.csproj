@@ -176,6 +176,7 @@
     <Compile Include="Controllers\OnlineController.cs" />
     <Compile Include="Controllers\RolodexController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Filters\TestFilters.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -423,7 +424,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Filters\" />
+    <Folder Include="Views\Shared\EditorTemplates\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -515,9 +516,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Crazy.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Calendar\EventsForMonth.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_MembersPartial.cshtml" />

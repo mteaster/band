@@ -52,21 +52,25 @@ namespace band.Controllers
 
         [HttpPost]
         public ActionResult CreateBandContact(BandContact bandContact, int bandId)
-        {  
+        {
+            if (!BandUtil.Authenticate(bandId, this))
+            {
+                return View("Error");
+            }
+
             if (ModelState.IsValid)
             {
-               
                using (DatabaseContext database = new DatabaseContext())
                {
                     bandContact.BandId = bandId;
                     database.BandContacts.Add(bandContact);
                     database.SaveChanges();
                }
-            }
-        
 
-            ViewBag.BandId = bandId;
-            return RedirectToAction("CreateContact", "Rolodex", new { BandId = bandId});
+               return RedirectToAction("CreateContact", "Rolodex", new { BandId = bandId });
+            }
+
+            return View(bandContact);
         }
 
         public ActionResult CreatePersonContact(int bandId)
@@ -83,17 +87,24 @@ namespace band.Controllers
         [HttpPost]
         public ActionResult CreatePersonContact(PeopleContact peopleContact, int bandId)
         {
+            if (!BandUtil.Authenticate(bandId, this))
+            {
+                return View("Error");
+            }
+
             if (ModelState.IsValid)
             {
                 using (DatabaseContext database = new DatabaseContext())
-                    {
-                        peopleContact.BandId = bandId;
-                        database.PeopleContacts.Add(peopleContact);
-                        database.SaveChanges();
-                    }
+                {
+                    peopleContact.BandId = bandId;
+                    database.PeopleContacts.Add(peopleContact);
+                    database.SaveChanges();
+
+                    return RedirectToAction("CreateContact", "Rolodex", new { BandId = bandId });
+                }
             }
-            ViewBag.BandId = bandId;
-            return RedirectToAction("CreateContact", "Rolodex", new { BandId = bandId });
+
+            return View(peopleContact);
         }
 
         public ActionResult CreateVenueContact(int bandId)
@@ -110,19 +121,24 @@ namespace band.Controllers
         [HttpPost]
         public ActionResult CreateVenueContact(VenueContact venueContact, int bandId)
         {
-            if (ModelState.IsValid)
+            if (!BandUtil.Authenticate(bandId, this))
             {
-                    using (DatabaseContext database = new DatabaseContext())
-                    {
-                        venueContact.BandId = bandId;
-                        database.VenueContacts.Add(venueContact);
-                        database.SaveChanges();
-                    }
-                
+                return View("Error");
             }
 
-           
-            return RedirectToAction("CreateContact", "Rolodex", new { BandId = bandId });
+            if (ModelState.IsValid)
+            {
+                using (DatabaseContext database = new DatabaseContext())
+                {
+                    venueContact.BandId = bandId;
+                    database.VenueContacts.Add(venueContact);
+                    database.SaveChanges();
+                }
+
+                return RedirectToAction("CreateContact", "Rolodex", new { BandId = bandId });
+            }
+
+            return View(venueContact);
         }
 
         [ActionName("RolodexList")]
@@ -551,9 +567,9 @@ namespace band.Controllers
         [HttpPost]
         public ActionResult UploadAvatar(int contactId, ContactType contactType, HttpPostedFileBase file)
         {
-            if (file.ContentLength <= 0 || file.ContentLength > 1048576)
+            if (file.ContentLength <= 0 || file.ContentLength > 52428800)
             {
-                ViewBag.ErrorMessage = "file sucks";
+                ViewBag.ErrorMessage = "Something was wrong with the avatar you uploaded.";
                 return View("Error");
             }
 
@@ -567,10 +583,10 @@ namespace band.Controllers
                         bandId = database.BandContacts.Find(contactId).BandId;
                         break;
                     case ContactType.People:
-                        bandId = database.BandContacts.Find(contactId).BandId;
+                        bandId = database.PeopleContacts.Find(contactId).BandId;
                         break;
                     case ContactType.Venue:
-                        bandId = database.BandContacts.Find(contactId).BandId;
+                        bandId = database.VenueContacts.Find(contactId).BandId;
                         break;
                     default:
                         return View("Error");
@@ -614,9 +630,9 @@ namespace band.Controllers
                 return File(Server.MapPath("~/App_Data/UserAvatars/default.jpg"), "image/jpeg");
             }
         }
-        public ActionResult DownloadVenueAvatar(int bandId)
+        public ActionResult DownloadVenueAvatar(int contactId)
         {
-            string path = Server.MapPath("~/App_Data/VenueContactAvatars/" + bandId + ".jpg");
+            string path = Server.MapPath("~/App_Data/VenueContactAvatars/" + contactId + ".jpg");
 
             if (System.IO.File.Exists(path))
             {
@@ -627,6 +643,7 @@ namespace band.Controllers
                 return File(Server.MapPath("~/App_Data/UserAvatars/default.jpg"), "image/jpeg");
             }
         }
+       
         public static List<SelectListItem> GetSelectList(int bandId, string callingType)
         {
             List<SelectListItem> returnValue = new List<SelectListItem>();
@@ -678,6 +695,39 @@ namespace band.Controllers
                 }
             }
 
+            return returnValue;
+        }
+        public static List<SelectListItem> GetStageSizeList()
+        {
+            List<SelectListItem> returnValue = new List<SelectListItem>();
+
+            returnValue.Add(new SelectListItem() { Text = "Tiny", Value = "1" });
+            returnValue.Add(new SelectListItem() { Text = "Small", Value = "2" });
+            returnValue.Add(new SelectListItem() { Text = "Average", Value = "3" });
+            returnValue.Add(new SelectListItem() { Text = "Big", Value = "4" });
+            returnValue.Add(new SelectListItem() { Text = "Huge", Value = "5" });
+            return returnValue;
+        }
+        public static List<SelectListItem> GetSkillList()
+        {
+            List<SelectListItem> returnValue = new List<SelectListItem>();
+
+            returnValue.Add(new SelectListItem() { Text = "Awesome", Value = "1" });
+            returnValue.Add(new SelectListItem() { Text = "Good", Value = "2" });
+            returnValue.Add(new SelectListItem() { Text = "OK", Value = "3" });
+            returnValue.Add(new SelectListItem() { Text = "Poor", Value = "4" });
+            returnValue.Add(new SelectListItem() { Text = "Bad... Just Bad", Value = "5" });
+            return returnValue;
+        }
+        public static List<SelectListItem> GetPopularityList()
+        {
+            List<SelectListItem> returnValue = new List<SelectListItem>();
+
+            returnValue.Add(new SelectListItem() { Text = "Unknown", Value = "1" });
+            returnValue.Add(new SelectListItem() { Text = "Friends", Value = "2" });
+            returnValue.Add(new SelectListItem() { Text = "Moderate", Value = "3" });
+            returnValue.Add(new SelectListItem() { Text = "Popular", Value = "4" });
+            returnValue.Add(new SelectListItem() { Text = "Justin Bieber", Value = "5" });
             return returnValue;
         }
     }

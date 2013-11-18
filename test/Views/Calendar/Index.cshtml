@@ -52,7 +52,10 @@
         width: 100px;
         height: 100px;
         padding: 4px;
-        background: #ffffff;
+        background: -webkit-linear-gradient(white, lightgrey); /* For Safari */
+        background: -o-linear-gradient(white, lightgrey); /* For Opera 11.1 to 12.0 */
+        background: -moz-linear-gradient(white, lightgrey); /* For Firefox 3.6 to 15 */
+        background: linear-gradient(white, lightgrey); /* Standard syntax (must be last)*/ 
         border: 1px solid #b1b1b1;
     }
     #calendar-table td:hover
@@ -100,6 +103,7 @@
     {
         background-color: #f8f8f8 !important;
     }
+
 </style>
 
 <div style="float:left">
@@ -132,7 +136,7 @@
 <table id="calendar-table" cellpadding="0" cellspacing="0">
     <thead>
         <tr>
-            <th colspan="816" >@Model.MonthName @Model.CurrentMonthYear</th> 
+            <th colspan="816" style="height:50px; background:grey; font-size:40px;">@Model.MonthName @Model.CurrentMonthYear</th> 
         </tr>
         <tr>
             <th>Sunday</th>
@@ -150,7 +154,7 @@
             @{
                 for (int i = 0; i < Model.FirstDayOfWeek; i++)
                 {
-                    <td class="noday"></td>   
+                    <td style="background:lightgrey;"></td>   
                 }
                 
                 int currentDayOfWeek = Model.FirstDayOfWeek;
@@ -182,46 +186,16 @@
                     }
                 
                     if(hasEvent)
-                    {
-                        if ((currentDayOfWeek +1 ) % 7 == 0)
-                        {
-                            <td class="event" >
+                    { 
+                            <td style="background:#A7CFFF;">
                                 @Html.ActionLink(@currentDay.ToString(), "Day", new { bandId = ViewBag.bandId, day = currentDay, month = Model.CurrentMonth, year = Model.CurrentMonthYear })
                             </td>
-                        }
-                        else if ((currentDayOfWeek + 1) % 7 == 1)
-                        {
-                            <td class="event" >
-                                @Html.ActionLink(@currentDay.ToString(), "Day", new { bandId = ViewBag.bandId, day = currentDay, month = Model.CurrentMonth, year = Model.CurrentMonthYear })
-                            </td>
-                        }
-                        else
-                        {
-                            <td class="event">
-                                @Html.ActionLink(@currentDay.ToString(), "Day", new { bandId = ViewBag.bandId, day = currentDay, month = Model.CurrentMonth, year = Model.CurrentMonthYear })
-                            </td>
-                        }
                     }
                     else
                     {
-                        if ((currentDayOfWeek + 1) % 7 == 0)
-                        {
                             <td>
                                 @Html.ActionLink(@currentDay.ToString(), "Day", new { bandId = ViewBag.bandId, day = currentDay, month = Model.CurrentMonth, year = Model.CurrentMonthYear })
                             </td>
-                        }
-                        else if ((currentDayOfWeek + 1) % 7 == 1)
-                        {
-                            <td>
-                                @Html.ActionLink(@currentDay.ToString(), "Day", new { bandId = ViewBag.bandId, day = currentDay, month = Model.CurrentMonth, year = Model.CurrentMonthYear })
-                            </td>
-                        }
-                        else
-                        {
-                            <td>
-                                @Html.ActionLink(@currentDay.ToString(), "Day", new { bandId = ViewBag.bandId, day = currentDay, month = Model.CurrentMonth, year = Model.CurrentMonthYear })
-                            </td>
-                        }
                     }
 
                     currentDayOfWeek++;
@@ -230,12 +204,14 @@
                 
                 for (; currentDayOfWeek < 7; currentDayOfWeek++)
                 {
-                        @:<td class="noday"></td>   
+                        @:<td style="background:lightgrey;"></td>   
                 }
             }
         </tr>
     </tbody>
 </table>
+
+
 
 @Html.ActionLink("Previous Month", "Month", "Calendar",
                         new { bandId = ViewBag.BandId, month = Model.PreviousMonth, year = Model.PreviousMonthYear }, null)
