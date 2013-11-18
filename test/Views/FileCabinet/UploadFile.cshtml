@@ -1,0 +1,26 @@
+﻿@model test.Models.FileCabinet.UploadFileModel
+
+@{
+    ViewBag.Title = "File Cabinet";
+}
+
+@section featured 
+{
+    @Html.Partial("_BandHeaderPartial")
+}
+
+<p class="message-success">@ViewBag.SuccessMessage</p>
+<p class="message-error">@ViewBag.ErrorMessage</p>
+
+@using (Html.BeginForm("UploadFile", "FileCabinet", new { groupId = ViewBag.GroupId }, FormMethod.Post, new { enctype = "multipart/form-data" } ))
+{
+    @Html.LabelFor(model => model.File)
+    <input type="file" name="File" id="File" />
+
+    @Html.LabelFor(model => model.FileDescription)
+    @Html.EditorFor(model => model.FileDescription)
+    <br />
+    
+    <input type="submit" value="Upload" />
+}
+

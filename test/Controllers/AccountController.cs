@@ -1,9 +1,10 @@
-﻿using Microsoft.Web.WebPages.OAuth;
-using System;
+﻿using System;
 using System.Data;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using test.Models;
+using test.Models.Account;
 using WebMatrix.WebData;
 
 namespace test.Controllers
@@ -11,18 +12,12 @@ namespace test.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        //
-        // GET: /Account/Login
-
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
-
-        //
-        // POST: /Account/Login
 
         [HttpPost]
         [AllowAnonymous]
@@ -39,9 +34,6 @@ namespace test.Controllers
             return View(model);
         }
 
-        //
-        // POST: /Account/LogOff
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
@@ -51,9 +43,6 @@ namespace test.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        //
-        // GET: /Account/Register
-
         [AllowAnonymous]
         public ActionResult Register()
         {
@@ -61,17 +50,13 @@ namespace test.Controllers
             return View();
         }
 
-        //
-        // POST: /Account/Register
-
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Register(RegisterModel model)
+        public ActionResult Register(RegisterUserModel model)
         {
             if (ModelState.IsValid)
             {
-                // Attempt to register the user
                 try
                 {
                     WebSecurity.CreateUserAndAccount(model.UserName, model.Password, new { DisplayName = model.DisplayName } );
@@ -89,19 +74,12 @@ namespace test.Controllers
             return View(model);
         }
 
-        //
-        // GET: /Account/Manage
-
         public ActionResult Manage()
         {
             ViewBag.SuccessMessage = TempData["SuccessMessage"];
             ViewBag.ErrorMessage = TempData["ErrorMessage"];
             return View();
         }
-
-
-        //
-        // POST: /Account/ChangeDisplayName
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -127,10 +105,6 @@ namespace test.Controllers
             return RedirectToAction("Manage");
         }
         
-
-        //
-        // POST: /Account/ChangePassword
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ChangePassword(UserPasswordModel model)
@@ -163,6 +137,37 @@ namespace test.Controllers
             }
 
             return RedirectToAction("Manage");
+        }
+
+        [HttpPost]
+        public ActionResult UploadAvatar(HttpPostedFileBase file)
+        {
+            if (file.ContentLength <= 0 || file.ContentLength > 1048576)
+            {
+                TempData["ErrorMessage"] = "Something was wrong with the avatar you uploaded.";
+            }
+            else
+            {
+                string path = Server.MapPath("~/App_Data/UserAvatars/" + WebSecurity.CurrentUserId + ".jpg");
+                file.SaveAs(path);
+                TempData["ErrorMessage"] = "Avatar changed.";
+            }
+
+            return RedirectToAction("Manage");
+        }
+
+        public ActionResult DownloadAvatar(int userId)
+        {
+            string path = Server.MapPath("~/App_Data/UserAvatars/" + userId + ".jpg");
+
+            if (System.IO.File.Exists(path))
+            {
+                return File(path, "image/jpeg");
+            }
+            else
+            {
+                return File(Server.MapPath("~/App_Data/UserAvatars/default.jpg"), "image/jpeg");
+            }
         }
 
         #region Helpers

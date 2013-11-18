@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using System.Web.Security;
 using test.Models;
+using test.Models.Dashboard;
 using test.Stuff;
 using WebMatrix.WebData;
 
@@ -9,96 +10,117 @@ namespace band.Controllers
     [Authorize]
     public class DashboardController : Controller
     {
-        public ActionResult DeletePost(int postId)
-        {
-            if (MessageBoardUtil.DeletePost(postId))
-            {
-                TempData["SuccessMessage"] = "Post deleted!";
-            }
-            else
-            {
-                TempData["ErrorMessage"] = "You cannot delete someone else's post!";
-            }
-
-            return RedirectToLocal(Request.UrlReferrer.AbsolutePath);
-        }
-
-        [HttpPost]
-        public ActionResult EditPost(int postId, PostMessageModel model)
-        {
-            if (MessageBoardUtil.EditPost(postId, model.Content))
-            {
-                TempData["SuccessMessage"] = "Post edited!";
-            }
-            else
-            {
-                TempData["ErrorMessage"] = "You cannot edit someone else's post!";
-            }
-
-            return RedirectToLocal(Request.UrlReferrer.AbsolutePath);
-        }
-
-        public ActionResult EditPost(int postId)
-        {
-            ViewBag.PostId = postId;
-            return View();
-        }
-
         public ActionResult Index(int bandId)
         {
-            // Check if band exists - if it does, get band profile
-            BandProfile bandProfile = BandUtil.BandProfileFor(bandId);
+            return RedirectToAction("Page", new { bandId = bandId, pageNumber = 1 });
+        }
 
-            DashboardViewModel dvm = new DashboardViewModel();
-
-            ViewBag.BandId = bandId;
-            ViewBag.BandName = bandProfile.BandName;
-
-            // Check if the user is in the band
-            if (!BandUtil.IsUserInBand(WebSecurity.CurrentUserId, bandId) && !Roles.IsUserInRole("Administrator"))
+        public ActionResult Page(int bandId, int pageNumber)
+        {
+            if (!BandUtil.Authenticate(bandId, this))
             {
                 return RedirectToAction("Join", "Band");
             }
 
+            DashboardViewModel dvm = new DashboardViewModel();
+
             ViewBag.SuccessMessage = TempData["SuccessMessage"];
             ViewBag.ErrorMessage = TempData["ErrorMessage"];
 
-            dvm.DisplayMessagesModel = MessageBoardUtil.PostsFor(bandId);
-            
-            return View(dvm);
+            dvm.DisplayMessagesModel = MessageBoardUtil.GetPage(bandId, pageNumber);
+
+            return View("Index", dvm);
         }
 
         [HttpPost]
         public ActionResult Index(int bandId, PostMessageModel model)
         {
-            // Check if band exists - if it does, get band profile
-            BandProfile bandProfile = BandUtil.BandProfileFor(bandId);
-
-            ViewBag.BandId = bandId;
-            ViewBag.BandName = bandProfile.BandName;
-
-            // Check if the user is in the band
-            if (!BandUtil.IsUserInBand(WebSecurity.CurrentUserId, bandId))
+            if (!BandUtil.Authenticate(bandId, this))
             {
                 return RedirectToAction("Join", "Band");
             }
 
             DashboardViewModel dvm = new DashboardViewModel();
-            dvm.PostMessageModel = model;
 
             if (ModelState.IsValid)
             {
-                MessageBoardUtil.AddPost(bandId, model.Content);
+                MessageBoardUtil.AddMessagePost(bandId, model.Content);
                 ViewBag.SuccessMessage = "Message posted!";
             }
             else
             {
+                dvm.PostMessageModel = model;
                 ViewBag.ErrorMessage = "We don't like empty messages.";
             }
 
-            dvm.DisplayMessagesModel = MessageBoardUtil.PostsFor(bandId);
+            dvm.DisplayMessagesModel = MessageBoardUtil.GetPage(bandId, 1);
 
             return View(dvm);
+        }
+
+        public ActionResult DeletePost(int postId)
+        {
+            using (DatabaseContext database = new DatabaseContext())
+            {
+                MessageBoardPost post = database.MessageBoardPosts.Find(postId);
+
+                if (post == null)
+                {
+                    ViewBag.ErrorMessage = "Post not found.";
+                    return View("Error");
+                }
+
+                if (!BandUtil.Authenticate(post.BandId, this))
+                {
+                    return View("Error");
+                }
+
+                if (post.PosterId != WebSecurity.CurrentUserId && !Roles.IsUserInRole("Administrator"))
+                {
+                    ViewBag.ErrorMessage = "You can't delete someone else's post.";
+                    return View("Error");
+                }
+
+                database.MessageBoardPosts.Remove(post);
+                database.SaveChanges();
+
+                TempData["SuccessMessage"] = "Post deleted!";
+
+                return RedirectToAction("Index", new { bandId = post.BandId, pageNumber = 1 });
+            }
+        }
+
+        [HttpPost]
+        public ActionResult EditPost(int postId, PostMessageModel model)
+        {
+            using (DatabaseContext database = new DatabaseContext())
+            {
+                MessageBoardPost post = database.MessageBoardPosts.Find(postId);
+
+                if (post == null)
+                {
+                    ViewBag.ErrorMessage = "Post not found.";
+                    return View("Error");
+                }
+
+                if (!BandUtil.Authenticate(post.BandId, this))
+                {
+                    return View("Error");
+                }
+
+                if (post.PosterId != WebSecurity.CurrentUserId && !Roles.IsUserInRole("Administrator"))
+                {
+                    ViewBag.ErrorMessage = "You can't edit someone else's post.";
+                    return View("Error");
+                }
+
+                post.Content = model.Content;
+                database.SaveChanges();
+
+                TempData["SuccessMessage"] = "Post edited!";
+
+                return RedirectToAction("Index", new { bandId = post.BandId, pageNumber = 1 });
+            }
         }
 
         private ActionResult RedirectToLocal(string returnUrl)

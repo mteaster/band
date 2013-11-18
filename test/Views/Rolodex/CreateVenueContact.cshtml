@@ -1,0 +1,52 @@
+﻿@model test.Models.Rolodex.VenueContact
+
+
+@section featured 
+{
+    @Html.Partial("_BandHeaderPartial")
+}
+
+@using (Html.BeginForm("CreateVenueContact", "Rolodex", new { bandId = ViewBag.BandId }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+
+    <fieldset>
+        <legend>Registration Form</legend>
+        <ol>
+            <li>
+                @Html.LabelFor(m => m.Name)
+                @Html.TextBoxFor(m => m.Name)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.PhoneNumber)
+                @Html.TextBoxFor(m => m.PhoneNumber)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.Email)
+                @Html.TextBoxFor(m => m.Email)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.FreeBeer)
+                @Html.CheckBoxFor(m => m.FreeBeer)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.CoverCharge)
+                @Html.CheckBoxFor(m => m.CoverCharge)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.MerchSpace)
+                @Html.CheckBoxFor(m => m.MerchSpace)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.Notes)
+                @Html.TextBoxFor(m => m.Notes)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.PrimaryPeopleContactId)
+                @Html.DropDownListFor(m => m.PrimaryPeopleContactId, (List<SelectListItem>) band.Controllers.RolodexController.GetSelectList(ViewBag.BandId, "Venue"))
+            </li>
+        </ol>
+        <input type="submit" value="Save" />
+    </fieldset>
+}

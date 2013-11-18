@@ -1,10 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
+using System.Web;
 using System.Web.Helpers;
+using System.Web.Mvc;
 using System.Web.Security;
 using test.Models;
+using test.Models.Band;
+using test.Models.Calendar;
+using test.Models.Dashboard;
+using test.Models.FileCabinet;
 using WebMatrix.WebData;
 
 namespace test.Stuff
@@ -25,6 +32,39 @@ namespace test.Stuff
             }
         }
 
+        public static bool BandExists(int bandId)
+        {
+            using (DatabaseContext database = new DatabaseContext())
+            {
+                return database.BandProfiles.Find(bandId) != null;
+            }
+        }
+
+        public static bool Authenticate(int bandId, ControllerBase controller)
+        {
+            using (DatabaseContext database = new DatabaseContext())
+            {
+                BandProfile profile = database.BandProfiles.Find(bandId);
+
+                if (profile == null)
+                {
+                    controller.ViewBag.ErrorMessage = "We couldn't find a band with that id.";
+                    return false;
+                }
+
+                if (database.BandMemberships.Find(bandId, WebSecurity.CurrentUserId) == null && !Roles.IsUserInRole("Administrator"))
+                {
+                    controller.ViewBag.ErrorMessage = "You must be a member of this band to access its content.";
+                    return false;
+                }
+
+                controller.ViewBag.BandId = bandId;
+                controller.ViewBag.BandName = profile.BandName;
+
+                return true;
+            }
+        }
+
         public static int Register(RegisterBandModel model)
         {
             using (DatabaseContext database = new DatabaseContext())
@@ -41,6 +81,8 @@ namespace test.Stuff
                 return profile.BandId;
             }
         }
+
+
 
         public static bool Join(int bandId, string password)
         {
@@ -79,7 +121,8 @@ namespace test.Stuff
             }
         }
 
-        public static bool Delete(int bandId)
+        // Might just want to pass the band directory here, not the HttpServerUtilityBase
+        public static bool Delete(int bandId, HttpServerUtilityBase server)
         {
             using (DatabaseContext database = new DatabaseContext())
             {
@@ -102,6 +145,27 @@ namespace test.Stuff
                 foreach (MessageBoardPost post in posts)
                 {
                     database.MessageBoardPosts.Remove(post);
+                }
+
+                IQueryable<CalendarEvent> events = database.CalendarEvents.Where(e => e.BandId == bandId);
+                foreach (CalendarEvent evt in events)
+                {
+                    database.CalendarEvents.Remove(evt);
+                }
+
+                string directory = server.MapPath("~/App_data/" + bandId + "/");
+                IQueryable<FileEntry> files = database.FileEntries.Where(f => f.BandId == bandId);
+                foreach (FileEntry file in files)
+                {
+                    File.Delete(directory + file.FileId);
+                    database.FileEntries.Remove(file);
+                }
+                System.IO.Directory.Delete(directory);
+
+                IQueryable<FileGroup> groups= database.FileGroups.Where(g => g.BandId == bandId);
+                foreach (FileGroup group in groups)
+                {
+                    database.FileGroups.Remove(group);
                 }
 
                 database.SaveChanges();
@@ -174,10 +238,10 @@ namespace test.Stuff
             using (DatabaseContext database = new DatabaseContext())
             {
                 var results = from b in database.BandMemberships
-                                      join u in database.UserProfiles
-                                      on b.MemberId equals u.UserId
-                                      where b.BandId == bandId
-                                      select new { u.UserName, u.DisplayName };
+                              join u in database.UserProfiles
+                              on b.MemberId equals u.UserId
+                              where b.BandId == bandId
+                              select new { u.UserName, u.DisplayName };
 
                 List<MemberModel> memberModels = new List<MemberModel>();
 

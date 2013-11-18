@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Web.Mvc;
 
-namespace test.Models
+namespace test.Models.Account
 {
     [Table("UserProfile")]
     public class UserProfile
@@ -62,7 +62,7 @@ namespace test.Models
         public bool RememberMe { get; set; }
     }
 
-    public class RegisterModel
+    public class RegisterUserModel
     {
         [Required]
         [Display(Name = "Display name")]

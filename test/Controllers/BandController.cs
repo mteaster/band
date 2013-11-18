@@ -1,6 +1,7 @@
-﻿using System.Web.Mvc;
+﻿using System.Web;
+using System.Web.Mvc;
 using System.Web.Security;
-using test.Models;
+using test.Models.Band;
 using test.Stuff;
 using WebMatrix.WebData;
 
@@ -11,17 +12,16 @@ namespace test.Controllers
     {
         [AllowAnonymous]
         [ChildActionOnly]
-        public ActionResult Members(int bandId)
-        {
-            return PartialView("_MembersPartial", BandUtil.MemberModelsFor(bandId));
-        }
-
-
-        [AllowAnonymous]
-        [ChildActionOnly]
         public ActionResult Bands()
         {
             return PartialView("_BandsPartial", BandUtil.BandModelsFor(WebSecurity.CurrentUserId));
+        }
+
+        [AllowAnonymous]
+        [ChildActionOnly]
+        public ActionResult Members(int bandId)
+        {
+            return PartialView("_MembersPartial", BandUtil.MemberModelsFor(bandId));
         }
 
         public ActionResult Register()
@@ -71,10 +71,8 @@ namespace test.Controllers
 
         public ActionResult Join(int bandId)
         {
-            BandProfile bandProfile = BandUtil.BandProfileFor(bandId);
-
             ViewBag.BandId = bandId;
-            ViewBag.BandName = bandProfile.BandName;
+            ViewBag.BandName = BandUtil.BandNameFor(bandId);
 
             if (BandUtil.IsUserInBand(WebSecurity.CurrentUserId, bandId))
             {
@@ -99,6 +97,7 @@ namespace test.Controllers
 
             if (BandUtil.Join(bandId, model.Password))
             {
+                MessageBoardUtil.AddJoinPost(bandId);
                 return RedirectToAction("Index", "Dashboard");
             }
             else
@@ -110,29 +109,25 @@ namespace test.Controllers
 
         public ActionResult Leave(int bandId)
         {
-            BandProfile bandProfile = BandUtil.BandProfileFor(bandId);
+            string bandName = BandUtil.BandNameFor(bandId);
 
             if (BandUtil.Leave(bandId))
             {
-                ViewBag.SuccessMessage = "You left '" + bandProfile.BandName + "'.";
+                MessageBoardUtil.AddLeavePost(bandId);
+                ViewBag.SuccessMessage = "You left '" + bandName + "'.";
                 return View("Success");
             }
 
-            ViewBag.ErrorMessage = "We can't let you leave '" + bandProfile.BandName + "'.";
+            ViewBag.ErrorMessage = "We can't let you leave '" + bandName + "'.";
             return View("Error");
         }
 
         public ActionResult Manage(int bandId)
         {
-            if (!BandUtil.IsUserInBand(WebSecurity.CurrentUserId, bandId) && !Roles.IsUserInRole("Administrator"))
+            if (!BandUtil.Authenticate(bandId, this))
             {
-                ViewBag.ErrorMessage = "You must be a member of this band to change its preferences.";
                 return View("Error");
             }
-
-            BandProfile bandProfile = BandUtil.BandProfileFor(bandId);
-            ViewBag.BandId = bandId;
-            ViewBag.BandName = bandProfile.BandName;
 
             ViewBag.SuccessMessage = TempData["SuccessMessage"];
             ViewBag.ErrorMessage = TempData["ErrorMessage"];
@@ -174,7 +169,7 @@ namespace test.Controllers
 
         public ActionResult Delete(int bandId)
         {
-            if (BandUtil.Delete(bandId))
+            if (BandUtil.Delete(bandId, Server))
             {
                 ViewBag.SuccessMessage = "Your band has been deleted.";
                 return View("Success");
@@ -182,6 +177,46 @@ namespace test.Controllers
 
             TempData["ErrorMessage"] = "You must be the creator of this band to delete it.";
             return RedirectToLocal(Request.UrlReferrer.AbsolutePath);
+        }
+
+        [HttpPost]
+        public ActionResult UploadAvatar(int bandId, HttpPostedFileBase file)
+        {
+            if (!BandUtil.IsUserInBand(WebSecurity.CurrentUserId, bandId) && !Roles.IsUserInRole("Administrator"))
+            {
+                ViewBag.ErrorMessage = "You must be a member of this band to change its preferences.";
+                return View("Error");
+            }
+
+            ViewBag.BandId = bandId;
+            ViewBag.BandName = BandUtil.BandNameFor(bandId);
+
+            if (file.ContentLength <= 0 || file.ContentLength > 1048576)
+            {
+                TempData["ErrorMessage"] = "Something was wrong with the avatar you uploaded.";
+            }
+            else
+            {
+                string path = Server.MapPath("~/App_Data/BandAvatars/" + WebSecurity.CurrentUserId + ".jpg");
+                file.SaveAs(path);
+                TempData["ErrorMessage"] = "Avatar changed.";
+            }
+
+            return RedirectToAction("Manage");
+        }
+
+        public ActionResult DownloadAvatar(int userId)
+        {
+            string path = Server.MapPath("~/App_Data/UserAvatars/" + userId + ".jpg");
+
+            if (System.IO.File.Exists(path))
+            {
+                return File(path, "image/jpeg");
+            }
+            else
+            {
+                return File(Server.MapPath("~/App_Data/UserAvatars/default.jpg"), "image/jpeg");
+            }
         }
 
         private ActionResult RedirectToLocal(string returnUrl)

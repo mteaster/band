@@ -6,3 +6,7 @@
 {
     @Html.Partial("_BandHeaderPartial")
 }
+
+<div>@Html.ActionLink("Create Contact", "CreateContact", new { bandId = ViewBag.BandId })</div>
+
+@{Html.RenderAction("RolodexList", "Rolodex", new { bandId = ViewBag.BandId });}

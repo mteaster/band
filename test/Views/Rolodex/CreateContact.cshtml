@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "Create Contact";
+}
+
+<script type="text/javascript">
+
+</script>
+
+@section featured 
+{
+    @Html.Partial("_BandHeaderPartial")
+}
+
+<h2>CreateContact</h2>
+
+  
+@Html.ActionLink("Create Band Contact", "CreateBandContact", new{bandId = ViewBag.BandId})
+@Html.ActionLink("Create Person Contact", "CreatePersonContact", new{bandId = ViewBag.BandId})
+@Html.ActionLink("Create Venue Contact", "CreateVenueContact", new {bandId = ViewBag.BandId})
+
+
+<div id="dvForm"></div> 
+

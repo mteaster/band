@@ -1,3 +1,6 @@
+@model test.Models.Calendar.MonthModel
+
+
 @{
     ViewBag.Title = "Calendar";
 }
@@ -8,17 +11,236 @@
     @Html.Partial("_BandHeaderPartial")
 }
 
+<body onload="changeLink()">
 
+<script  type="text/javascript">
+        function changeLink() {
+            var yearList = document.getElementById("yearSelect");
+            var monthList = document.getElementById("monthSelect");
+            var goToLink = document.getElementById("goTo");
+            var linkText = "../";
+            linkText = linkText.concat(document.getElementById("monthSelect")[monthList.selectedIndex].text);
+            linkText = linkText.concat("/");
+            linkText = linkText.concat(document.getElementById("yearSelect")[yearList.selectedIndex].text);
+            goToLink.href = linkText;
+        }
+</script>
 
+<p class="message-success">@ViewBag.SuccessMessage</p>
+<p class="message-error">@ViewBag.ErrorMessage</p>
 
-<html>
-<body>
+<style type="text/css">
+    #calendar-table 
+    {
+        width: 716px;
+        background: #ffffff;
+        border: 1px solid #b1b1b1;
+    }
+    #calendar-table th
+    {
+        vertical-align: top;
+        text-align: center;
+        width: 100px;
+        height: 20px;
+        padding: 4px;
+        background: #acacac;
+        border: 1px solid #b1b1b1;
+    }
+    #calendar-table td
+    {
+        vertical-align: top;
+        width: 100px;
+        height: 100px;
+        padding: 4px;
+        background: #ffffff;
+        border: 1px solid #b1b1b1;
+    }
+    #calendar-table td:hover
+    {
+        background: #CCFFFF !important;
+    }
+    #calendar-table td:active
+    {
+        background: #6699FF !important;
+    }
+    #calendar-table td p
+    {
+        text-align: center;
+    }
+    #calendar-table td a:hover
+    {
+        background-color: #CCFFFF;
+    }
+    #calendar-table td a:active
+    {
+        background-color: #6699FF;
+    }
+    #nav-a a 
+    {
+        float:right;
+    }
+    #nav-select select 
+    {
+        float:right;
+    }
+    .nostyle table, caption, tbody, tfoot, thead, tr, th, td {
+          margin: 0;
+          padding: 0;
+          border: 0;
+          outline: 0;
+          font-size: 100%;
+          vertical-align: baseline;
+          background: transparent;
+    }
+    td.event
+    {
+        background-color: #9EB2CB !important;
+    }
+    td.noday
+    {
+        background-color: #f8f8f8 !important;
+    }
+</style>
 
-<iframe src="https://www.google.com/calendar/embed?src=cqemps0k2pkucgnd7kemkrd6p0%40group.calendar.google.com&ctz=America/Chicago" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+<div style="float:left">
+        <select id="yearSelect" onchange="changeLink()" class="nav-select">
+            <option>@(Model.CurrentMonthYear - 1)</option>
+            <option selected>@(Model.CurrentMonthYear)</option>
+            <option>@(Model.CurrentMonthYear + 1)</option>
+        </select>
 
+        <select id="monthSelect" onchange="changeLink()" class="nav-select">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+            <option>6</option>
+            <option>7</option>
+            <option>8</option>
+            <option>9</option>
+            <option>10</option>
+            <option>11</option>
+            <option>12</option>
+        </select>
+       
+        <a id="goTo" href="garbage" class="nav-a"> Go to month </a>
+</div>
+
+<br>
+
+<table id="calendar-table" cellpadding="0" cellspacing="0">
+    <thead>
+        <tr>
+            <th colspan="816" >@Model.MonthName @Model.CurrentMonthYear</th> 
+        </tr>
+        <tr>
+            <th>Sunday</th>
+            <th>Monday</th>
+            <th>Tuesday</th>
+            <th>Wednesday</th>
+            <th>Thursday</th>
+            <th>Friday</th>
+            <th>Saturday</th>
+        </tr>
+    </thead> 
+
+    <tbody>
+        <tr>
+            @{
+                for (int i = 0; i < Model.FirstDayOfWeek; i++)
+                {
+                    <td class="noday"></td>   
+                }
+                
+                int currentDayOfWeek = Model.FirstDayOfWeek;
+                int currentDay = 1;
+
+                var monthEvents = Model.Events;
+           
+                bool hasEvent;
+            
+                while(currentDay <= Model.DaysInMonth)
+                {
+                    hasEvent = false;
+                    if(currentDayOfWeek == 7)
+                    {
+                        currentDayOfWeek = 0;
+                        @:</tr><tr>
+                    }
+                
+                    if(monthEvents != null)
+                    {
+                        //checking to see if a given day has an event(s) for indicating if it has events
+                        foreach ( test.Models.Calendar.CalendarEvent ev in monthEvents)
+                        {
+                            if (ev.EventTime.Day == currentDay)
+                            {
+                                hasEvent = true;
+                            }
+                        }
+                    }
+                
+                    if(hasEvent)
+                    {
+                        if ((currentDayOfWeek +1 ) % 7 == 0)
+                        {
+                            <td class="event" >
+                                @Html.ActionLink(@currentDay.ToString(), "Day", new { bandId = ViewBag.bandId, day = currentDay, month = Model.CurrentMonth, year = Model.CurrentMonthYear })
+                            </td>
+                        }
+                        else if ((currentDayOfWeek + 1) % 7 == 1)
+                        {
+                            <td class="event" >
+                                @Html.ActionLink(@currentDay.ToString(), "Day", new { bandId = ViewBag.bandId, day = currentDay, month = Model.CurrentMonth, year = Model.CurrentMonthYear })
+                            </td>
+                        }
+                        else
+                        {
+                            <td class="event">
+                                @Html.ActionLink(@currentDay.ToString(), "Day", new { bandId = ViewBag.bandId, day = currentDay, month = Model.CurrentMonth, year = Model.CurrentMonthYear })
+                            </td>
+                        }
+                    }
+                    else
+                    {
+                        if ((currentDayOfWeek + 1) % 7 == 0)
+                        {
+                            <td>
+                                @Html.ActionLink(@currentDay.ToString(), "Day", new { bandId = ViewBag.bandId, day = currentDay, month = Model.CurrentMonth, year = Model.CurrentMonthYear })
+                            </td>
+                        }
+                        else if ((currentDayOfWeek + 1) % 7 == 1)
+                        {
+                            <td>
+                                @Html.ActionLink(@currentDay.ToString(), "Day", new { bandId = ViewBag.bandId, day = currentDay, month = Model.CurrentMonth, year = Model.CurrentMonthYear })
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                @Html.ActionLink(@currentDay.ToString(), "Day", new { bandId = ViewBag.bandId, day = currentDay, month = Model.CurrentMonth, year = Model.CurrentMonthYear })
+                            </td>
+                        }
+                    }
+
+                    currentDayOfWeek++;
+                    currentDay++;
+                }
+                
+                for (; currentDayOfWeek < 7; currentDayOfWeek++)
+                {
+                        @:<td class="noday"></td>   
+                }
+            }
+        </tr>
+    </tbody>
+</table>
+
+@Html.ActionLink("Previous Month", "Month", "Calendar",
+                        new { bandId = ViewBag.BandId, month = Model.PreviousMonth, year = Model.PreviousMonthYear }, null)
+
+@Html.ActionLink("Next Month", "Month", "Calendar",
+                        new { bandId = ViewBag.BandId, month = Model.NextMonth, year = Model.NextMonthYear }, null)
+    
 </body>
-</html>
-
-@Html.ActionLink("Add event", "AddEvent")
-@Html.ActionLink("DECEMBER EVENTS", "EventsForMonth", "Calendar", 
-                            new { bandId = ViewBag.BandId, month = 12, year = 2013 }, null)

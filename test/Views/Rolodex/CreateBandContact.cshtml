@@ -1,0 +1,47 @@
+﻿@model test.Models.Rolodex.BandContact
+
+@section Scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+@section featured 
+{
+    @Html.Partial("_BandHeaderPartial")
+}
+
+@using (Html.BeginForm("CreateBandContact", "Rolodex", new { bandId = ViewBag.BandId }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+    <fieldset>
+        <legend>Registration Form</legend>
+        <ol>
+            <li>
+                @Html.LabelFor(m => m.Name)
+                @Html.TextBoxFor(m => m.Name)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.PhoneNumber)
+                @Html.TextBoxFor(m => m.PhoneNumber)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.Email)
+                @Html.TextBoxFor(m => m.Email)
+            </li>
+            <li> 
+                @Html.LabelFor(m => m.MusicalStyle)
+                @Html.TextBoxFor(m => m.MusicalStyle)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.Notes)
+                @Html.TextBoxFor(m => m.Notes)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.PrimaryPeopleContactId)
+                @Html.DropDownListFor(m => m.PrimaryPeopleContactId, (List<SelectListItem>) band.Controllers.RolodexController.GetSelectList(ViewBag.BandId, "Band"))
+            </li>
+        </ol>
+        <input type="submit" value="Save" />
+    </fieldset>
+}

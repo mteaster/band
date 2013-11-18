@@ -1,0 +1,15 @@
+﻿@model test.Models.FileCabinet.FileModel
+
+@Html.ActionLink("Back to group", "Files", new { groupId = Model.GroupId })
+
+<br />
+<br />
+
+<div class="file">
+    <h2>@Model.FileName</h2>
+
+    <span class="info">Uploaded by <strong>@Model.UploaderName</strong> on <strong>@Model.ModifiedTime.ToString("M")</strong> at <strong>@Model.ModifiedTime.ToString("T")</strong></span><br />
+    <p>@Model.FileDescription</p>
+    @Html.ActionLink("Download", "DownloadFile", new { fileId = Model.FileId })
+    @Html.ActionLink("Delete", "DeleteFile", new { fileId = Model.FileId })
+</div>

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.Security;
 using test.Models;
+using test.Models.Dashboard;
 using WebMatrix.WebData;
 
 namespace test.Stuff
@@ -14,19 +16,52 @@ namespace test.Stuff
 
     public class MessageBoardUtil
     {
-        public static void AddPost(int bandId, string content)
-        {
-            MessageBoardPost post = new MessageBoardPost();
-            post.BandId = bandId;
-            post.PosterId = WebSecurity.CurrentUserId;
-            post.PostTime = DateTime.UtcNow;
-            post.Content = content;
+        const int POSTS_PER_PAGE = 10;
 
+        public static void AddMessagePost(int bandId, string content)
+        {
             using (DatabaseContext database = new DatabaseContext())
             {
-                database.MessageBoardPosts.Add(post);
-                database.SaveChanges();
+                AddPost(bandId, PostType.Message, content, database);
             }
+        }
+
+        public static void AddJoinPost(int bandId)
+        {
+            using (DatabaseContext database = new DatabaseContext())
+            {
+                string content = database.UserProfiles.Find(WebSecurity.CurrentUserId).DisplayName + " joined the band.";
+                AddPost(bandId, PostType.Join, content, database);
+            }
+        }
+
+        public static void AddLeavePost(int bandId)
+        {
+            using (DatabaseContext database = new DatabaseContext())
+            {
+                string content = database.UserProfiles.Find(WebSecurity.CurrentUserId).DisplayName + " left the band.";
+                AddPost(bandId, PostType.Leave, content, database);
+            }
+        }
+
+        public static void AddFilePost(int bandId, int fileId)
+        {
+            using (DatabaseContext database = new DatabaseContext())
+            {
+                string content = database.UserProfiles.Find(WebSecurity.CurrentUserId).DisplayName + " uploaded" +
+                        "<a href=\"/FileCabinet/ViewFile?fileId=" + fileId + "\">" +
+                        database.FileEntries.Find(fileId).FileName + ".</a>";
+                AddPost(bandId, PostType.File, content, database);
+            }
+        }
+
+        private static void AddPost(int bandId, PostType type, string content, DatabaseContext database)
+        {
+            MessageBoardPost post = new MessageBoardPost(bandId, WebSecurity.CurrentUserId,
+                            type, DateTime.UtcNow, content);
+
+            database.MessageBoardPosts.Add(post);
+            database.SaveChanges();
         }
 
         public static List<MessageBoardPostModel> PostsFor(int bandId)
@@ -38,24 +73,54 @@ namespace test.Stuff
                               on p.PosterId equals u.UserId
                               where p.BandId == bandId
                               orderby p.PostTime descending
-                              select new { p.PostId, p.PostTime, p.Content, u.UserId, u.DisplayName };
+                              select new { p.PostId, p.PostType, p.PostTime, p.Content, u.UserId, u.DisplayName };
 
  
                 List<MessageBoardPostModel> postModels = new List<MessageBoardPostModel>();
 
                 foreach (var result in results)
                 {
-                    MessageBoardPostModel postModel = new MessageBoardPostModel();
-                    postModel.PostId = result.PostId;
-                    postModel.PosterId = result.UserId;
-                    postModel.PostTime = result.PostTime;
-                    postModel.Content = result.Content.Replace("\n", "<br>");
-                    postModel.PosterName = result.DisplayName;
+                    MessageBoardPostModel postModel = new MessageBoardPostModel(result.PostId, result.UserId, result.DisplayName,
+                                                                                    (PostType)result.PostType, result.PostTime, result.Content);
 
                     postModels.Add(postModel);
                 }
 
                 return postModels;
+            }
+        }
+
+        public static PageModel GetPage(int bandId, int pageNumber)
+        {
+            using (DatabaseContext database = new DatabaseContext())
+            {
+                PageModel pageModel = new PageModel();
+                pageModel.PageNumber = pageNumber;
+
+                var results = from p in database.MessageBoardPosts
+                              join u in database.UserProfiles
+                              on p.PosterId equals u.UserId
+                              where p.BandId == bandId
+                              orderby p.PostTime descending
+                              select new { p.PostId, p.PostType, p.PostTime, p.Content, u.UserId, u.DisplayName };
+
+                List<MessageBoardPostModel> postModels = new List<MessageBoardPostModel>();
+
+                pageModel.TotalPages = results.Count() / POSTS_PER_PAGE;
+
+                var postsOnPage = results.Skip((pageNumber - 1) * POSTS_PER_PAGE).Take(POSTS_PER_PAGE);
+
+                foreach (var page in postsOnPage)
+                {
+                    MessageBoardPostModel postModel = new MessageBoardPostModel(page.PostId, page.UserId, page.DisplayName,
+                                                                                    (PostType)page.PostType, page.PostTime, page.Content);
+
+                    postModels.Add(postModel);
+                }
+
+                pageModel.Posts = postModels;
+
+                return pageModel;
             }
         }
 
@@ -65,7 +130,7 @@ namespace test.Stuff
             {
                 MessageBoardPost post = PostFor(postId, database);
 
-                if (post.PosterId != WebSecurity.CurrentUserId)
+                if (post.PosterId != WebSecurity.CurrentUserId && !Roles.IsUserInRole("Administrator"))
                 {
                     return false;
                 }
@@ -83,7 +148,7 @@ namespace test.Stuff
             {
                 MessageBoardPost post = PostFor(postId, database);
                 
-                if (post.PosterId != WebSecurity.CurrentUserId)
+                if (post.PosterId != WebSecurity.CurrentUserId && !Roles.IsUserInRole("Administrator"))
                 {
                     return false;
                 }

@@ -1,75 +1,69 @@
 ﻿using System;
 using System.Web.Mvc;
 using test.Models;
+using test.Models.Calendar;
 using test.Stuff;
-using WebMatrix.WebData;
 
 namespace band.Controllers
 {
     public class CalendarController : Controller
     {
-        //
-        // GET: /Calendar/
-
         public ActionResult Index(int bandId)
         {
-            // Check if band exists - if it does, get band profile
-            BandProfile bandProfile = BandUtil.BandProfileFor(bandId);
+            DateTime now = DateTime.UtcNow;
+            return RedirectToAction("Month", new { bandId = bandId, month = now.Month, year = now.Year });
+        }
 
-            ViewBag.BandId = bandId;
-            ViewBag.BandName = bandProfile.BandName;
-
-            // Check if the user is in the band
-            if (!BandUtil.IsUserInBand(WebSecurity.CurrentUserId, bandId))
+        public ActionResult Month(int bandId, int month, int year)
+        {
+            if (!BandUtil.Authenticate(bandId, this))
             {
-                return RedirectToAction("Join", "Band");
+                return View("Error");
             }
+
+            MonthModel monthModel = new MonthModel(month, year);
+            monthModel.Events = CalendarUtil.EventsForMonth(bandId, monthModel.CurrentMonth, monthModel.CurrentMonthYear);
+
+            ViewBag.SuccessMessage = TempData["SuccessMessage"];
+            ViewBag.ErrorMessage = TempData["ErrorMessage"];
+
+            return View("Index", monthModel);
+        }
+
+        public ActionResult Day(int bandId, int day, int month, int year)
+        {
+            if (!BandUtil.Authenticate(bandId, this))
+            {
+                return View("Error");
+            }
+
+            DayModel model = new DayModel(day, month, year);
+            model.Events = CalendarUtil.EventsForDay(bandId, day, month, year);
+
+            return View(model);
+        }
+
+        public ActionResult AddEvent(int bandId, int day, int month, int year)
+        {
+            if (!BandUtil.Authenticate(bandId, this))
+            {
+                return View("Error");
+            }
+
+            ViewBag.Day = day;
+            ViewBag.Month = month;
+            ViewBag.Year = year;
 
             return View();
         }
-
-        //
-        // GET: /Calendar/AddEvent
-
-        public ActionResult AddEvent(int bandId)
-        {
-            // Check if band exists - if it does, get band profile
-            BandProfile bandProfile = BandUtil.BandProfileFor(bandId);
-
-            ViewBag.BandId = bandId;
-            ViewBag.BandName = bandProfile.BandName;
-
-            // Check if the user is in the band
-            if (!BandUtil.IsUserInBand(WebSecurity.CurrentUserId, bandId))
-            {
-                return RedirectToAction("Join", "Band");
-            }
-
-            return View();
-        }
-
-        public ActionResult EventsForMonth(int bandId, int month, int year)
-        {
-            return View(CalendarUtil.EventsForMonth(bandId, month, year));
-        }
-
-        //
-        // Post: /Calendar/AddEvent
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddEvent(int bandId, CalendarEventModel model)
+        public ActionResult AddEvent(int bandId, int day, int month, int year, CalendarEventModel model)
         {
-            // Check if band exists - if it does, get band profile
-            BandProfile bandProfile = BandUtil.BandProfileFor(bandId);
-
-            ViewBag.BandId = bandId;
-            ViewBag.BandName = bandProfile.BandName;
-
-            // Check if the user is in the band
-            if (!BandUtil.IsUserInBand(WebSecurity.CurrentUserId, bandId))
+            if (!BandUtil.Authenticate(bandId, this))
             {
-                return RedirectToAction("Join", "Band");
+                return View("Error");
             }
 
             if (ModelState.IsValid)
@@ -78,7 +72,19 @@ namespace band.Controllers
 
                 calendarEvent.BandId = bandId;
                 calendarEvent.EventTitle = model.EventTitle;    
-                calendarEvent.EventTime = new DateTime(model.EventYear, model.EventMonth, model.EventDay);
+
+                int actualHour = model.EventHour;
+                
+                if(model.EventPeriod.ToUpper() == "PM")
+                {
+                    actualHour += 12;
+                }
+                else if (actualHour == 12)
+                {
+                    actualHour = 0;
+                }
+
+                calendarEvent.EventTime = new DateTime(year, month, day, actualHour, model.EventMinute, 0, DateTimeKind.Unspecified);
                 calendarEvent.EventDescription = model.EventDescription;
 
                 using (DatabaseContext database = new DatabaseContext())
@@ -87,11 +93,87 @@ namespace band.Controllers
                     database.SaveChanges();
                 }
 
-                ViewBag.SuccessMessage = "we added a calendar event and nothing broke";
-                return View("Success");
+                TempData["SuccessMessage"] = "we added an event";
+                return RedirectToAction("Index", new { bandId = bandId });
             }
 
             return View(model);
+        }
+
+        public ActionResult EditEvent(int bandId, int eventId)
+        {
+            if (!BandUtil.Authenticate(bandId, this))
+            {
+                return View("Error");
+            }
+
+            ViewBag.EventId = eventId;
+
+            EditEventModel model;
+
+            using (DatabaseContext database = new DatabaseContext())
+            {
+                model = new EditEventModel(database.CalendarEvents.Find(eventId));
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditEvent(int bandId, int eventId, EditEventModel model)
+        {
+            if (!BandUtil.Authenticate(bandId, this))
+            {
+                return View("Error");
+            }
+
+            if (ModelState.IsValid)
+            {
+                using (DatabaseContext database = new DatabaseContext())
+                {
+                    CalendarEvent calendarEvent = database.CalendarEvents.Find(eventId);
+
+                    calendarEvent.EventTitle = model.EventTitle;
+                    calendarEvent.EventDescription = model.EventDescription;
+
+                    int actualHour = model.EventHour;
+                    if (model.EventPeriod.ToUpper() == "PM")
+                    {
+                        actualHour += 12;
+                    }
+
+                    DateTime date = DateTime.Parse(model.EventDate);
+                    TimeSpan span = new TimeSpan(actualHour, model.EventMinute, 0);
+                    calendarEvent.EventTime = date.Date + span;
+
+                    database.SaveChanges();
+                }
+
+                TempData["SuccessMessage"] = "we edited ur calendar event LOL";
+                return RedirectToAction("Index", new { bandId = bandId });
+            }
+
+            return View(model);
+        }
+
+        public ActionResult DeleteEvent(int eventId)
+        {
+            using (DatabaseContext database = new DatabaseContext())
+            {
+                CalendarEvent calendarEvent = database.CalendarEvents.Find(eventId);
+
+                if (!BandUtil.Authenticate(calendarEvent.BandId, this))
+                {
+                    return View("Error");
+                }
+
+                database.CalendarEvents.Remove(calendarEvent);
+                database.SaveChanges();
+
+                TempData["SuccessMessage"] = "we edited ur calendar event LOL";
+                return RedirectToAction("Index", new { bandId = calendarEvent.BandId });
+            }
         }
     }
 }

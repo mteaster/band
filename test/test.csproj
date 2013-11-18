@@ -176,22 +176,27 @@
     <Compile Include="Controllers\OnlineController.cs" />
     <Compile Include="Controllers\RolodexController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Filters\TestFilters.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\BandModels.cs" />
     <Compile Include="Models\CalendarModels.cs" />
+    <Compile Include="Models\RolodexModels.cs" />
+    <Compile Include="Models\FileCabinetModels.cs" />
     <Compile Include="Models\DatabaseContext.cs" />
     <Compile Include="Models\DashboardModels.cs" />
     <Compile Include="Models\TestModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stuff\BandUtil.cs" />
     <Compile Include="Stuff\CalendarUtil.cs" />
+    <Compile Include="Stuff\FileCabinetUtil.cs" />
+    <Compile Include="Stuff\TestUtil.cs" />
     <Compile Include="Stuff\MessageBoardUtil.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-timepicker.min.css" />
+    <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -246,8 +251,116 @@
     <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Include="Content\pdf.js\viewer.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\angular.min.js" />
+    <Content Include="Scripts\bootstrap-timepicker.min.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\pdf.js\compatibility.js" />
+    <Content Include="Scripts\pdf.js\debugger.js" />
+    <Content Include="Scripts\pdf.js\download_manager.js" />
+    <Content Include="Scripts\pdf.js\external\builder\builder.js" />
+    <Content Include="Scripts\pdf.js\external\crlfchecker\crlfchecker.js" />
+    <Content Include="Scripts\pdf.js\external\jasmine\jasmine-html.js" />
+    <Content Include="Scripts\pdf.js\external\jasmine\jasmine.css" />
+    <Content Include="Scripts\pdf.js\external\jasmine\jasmine.js" />
+    <Content Include="Scripts\pdf.js\external\jasmine\jasmine_favicon.png" />
+    <Content Include="Scripts\pdf.js\external\jpgjs\jpg.js" />
+    <Content Include="Scripts\pdf.js\external\shelljs\global.js" />
+    <Content Include="Scripts\pdf.js\external\shelljs\make.js" />
+    <Content Include="Scripts\pdf.js\external\shelljs\shell.js" />
+    <Content Include="Scripts\pdf.js\external\webL10n\l10n.js" />
+    <Content Include="Scripts\pdf.js\firefoxcom.js" />
+    <Content Include="Content\pdf.js\images\annotation-check.svg" />
+    <Content Include="Content\pdf.js\images\annotation-comment.svg" />
+    <Content Include="Content\pdf.js\images\annotation-help.svg" />
+    <Content Include="Content\pdf.js\images\annotation-insert.svg" />
+    <Content Include="Content\pdf.js\images\annotation-key.svg" />
+    <Content Include="Content\pdf.js\images\annotation-newparagraph.svg" />
+    <Content Include="Content\pdf.js\images\annotation-note.svg" />
+    <Content Include="Content\pdf.js\images\annotation-paragraph.svg" />
+    <Content Include="Content\pdf.js\images\findbarButton-next-rtl.png" />
+    <Content Include="Content\pdf.js\images\findbarButton-next.png" />
+    <Content Include="Content\pdf.js\images\findbarButton-previous-rtl.png" />
+    <Content Include="Content\pdf.js\images\findbarButton-previous.png" />
+    <Content Include="Content\pdf.js\images\loading-icon.gif" />
+    <Content Include="Content\pdf.js\images\loading-small.png" />
+    <Content Include="Content\pdf.js\images\secondaryToolbarButton-firstPage.png" />
+    <Content Include="Content\pdf.js\images\secondaryToolbarButton-lastPage.png" />
+    <Content Include="Content\pdf.js\images\secondaryToolbarButton-rotateCcw.png" />
+    <Content Include="Content\pdf.js\images\secondaryToolbarButton-rotateCw.png" />
+    <Content Include="Content\pdf.js\images\shadow.png" />
+    <Content Include="Content\pdf.js\images\texture.png" />
+    <Content Include="Content\pdf.js\images\toolbarButton-bookmark.png" />
+    <Content Include="Content\pdf.js\images\toolbarButton-download.png" />
+    <Content Include="Content\pdf.js\images\toolbarButton-menuArrows.png" />
+    <Content Include="Content\pdf.js\images\toolbarButton-openFile.png" />
+    <Content Include="Content\pdf.js\images\toolbarButton-pageDown-rtl.png" />
+    <Content Include="Content\pdf.js\images\toolbarButton-pageDown.png" />
+    <Content Include="Content\pdf.js\images\toolbarButton-pageUp-rtl.png" />
+    <Content Include="Content\pdf.js\images\toolbarButton-pageUp.png" />
+    <Content Include="Content\pdf.js\images\toolbarButton-presentationMode.png" />
+    <Content Include="Content\pdf.js\images\toolbarButton-print.png" />
+    <Content Include="Content\pdf.js\images\toolbarButton-search.png" />
+    <Content Include="Content\pdf.js\images\toolbarButton-secondaryToolbarToggle-rtl.png" />
+    <Content Include="Content\pdf.js\images\toolbarButton-secondaryToolbarToggle.png" />
+    <Content Include="Content\pdf.js\images\toolbarButton-sidebarToggle-rtl.png" />
+    <Content Include="Content\pdf.js\images\toolbarButton-sidebarToggle.png" />
+    <Content Include="Content\pdf.js\images\toolbarButton-viewOutline-rtl.png" />
+    <Content Include="Content\pdf.js\images\toolbarButton-viewOutline.png" />
+    <Content Include="Content\pdf.js\images\toolbarButton-viewThumbnail.png" />
+    <Content Include="Content\pdf.js\images\toolbarButton-zoomIn.png" />
+    <Content Include="Content\pdf.js\images\toolbarButton-zoomOut.png" />
+    <Content Include="Scripts\pdf.js\mozPrintCallback_polyfill.js" />
+    <Content Include="Scripts\pdf.js\page_view.js" />
+    <Content Include="Scripts\pdf.js\password_prompt.js" />
+    <Content Include="Scripts\pdf.js\pdf_find_bar.js" />
+    <Content Include="Scripts\pdf.js\pdf_find_controller.js" />
+    <Content Include="Scripts\pdf.js\pdf_history.js" />
+    <Content Include="Scripts\pdf.js\presentation_mode.js" />
+    <Content Include="Scripts\pdf.js\secondary_toolbar.js" />
+    <Content Include="Scripts\pdf.js\settings.js" />
+    <Content Include="Scripts\pdf.js\src\core\bidi.js" />
+    <Content Include="Scripts\pdf.js\src\core\charsets.js" />
+    <Content Include="Scripts\pdf.js\src\core\chunked_stream.js" />
+    <Content Include="Scripts\pdf.js\src\core\cidmaps.js" />
+    <Content Include="Scripts\pdf.js\src\core\cmap.js" />
+    <Content Include="Scripts\pdf.js\src\core\core.js" />
+    <Content Include="Scripts\pdf.js\src\core\crypto.js" />
+    <Content Include="Scripts\pdf.js\src\core\evaluator.js" />
+    <Content Include="Scripts\pdf.js\src\core\fonts.js" />
+    <Content Include="Scripts\pdf.js\src\core\font_renderer.js" />
+    <Content Include="Scripts\pdf.js\src\core\glyphlist.js" />
+    <Content Include="Scripts\pdf.js\src\core\image.js" />
+    <Content Include="Scripts\pdf.js\src\core\jbig2.js" />
+    <Content Include="Scripts\pdf.js\src\core\jpx.js" />
+    <Content Include="Scripts\pdf.js\src\core\metrics.js" />
+    <Content Include="Scripts\pdf.js\src\core\network.js" />
+    <Content Include="Scripts\pdf.js\src\core\obj.js" />
+    <Content Include="Scripts\pdf.js\src\core\parser.js" />
+    <Content Include="Scripts\pdf.js\src\core\pdf_manager.js" />
+    <Content Include="Scripts\pdf.js\src\core\stream.js" />
+    <Content Include="Scripts\pdf.js\src\core\worker.js" />
+    <Content Include="Scripts\pdf.js\src\display\api.js" />
+    <Content Include="Scripts\pdf.js\src\display\canvas.js" />
+    <Content Include="Scripts\pdf.js\src\display\font_loader.js" />
+    <Content Include="Scripts\pdf.js\src\display\metadata.js" />
+    <Content Include="Scripts\pdf.js\src\images\logo.svg" />
+    <Content Include="Scripts\pdf.js\src\pdf.js" />
+    <Content Include="Scripts\pdf.js\src\shared\annotation.js" />
+    <Content Include="Scripts\pdf.js\src\shared\cffStandardStrings.js" />
+    <Content Include="Scripts\pdf.js\src\shared\colorspace.js" />
+    <Content Include="Scripts\pdf.js\src\shared\fonts_utils.js" />
+    <Content Include="Scripts\pdf.js\src\shared\function.js" />
+    <Content Include="Scripts\pdf.js\src\shared\pattern.js" />
+    <Content Include="Scripts\pdf.js\src\shared\util.js" />
+    <Content Include="Scripts\pdf.js\src\worker_loader.js" />
+    <Content Include="Scripts\pdf.js\text_layer_builder.js" />
+    <Content Include="Scripts\pdf.js\thumbnail_view.js" />
+    <Content Include="Scripts\pdf.js\ui_utils.js" />
+    <Content Include="Scripts\pdf.js\viewer.js" />
+    <Content Include="Scripts\sortable.js" />
     <Content Include="Scripts\messageboard.js" />
     <Content Include="Scripts\test.js" />
     <Content Include="Scripts\jquery-1.7.1-vsdoc.js" />
@@ -265,6 +378,13 @@
     <Content Include="Scripts\knockout-2.1.0.debug.js" />
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
+    <Content Include="Views\FileCabinet\PDF.cshtml" />
+    <None Include="Scripts\pdf.js\external\jasmine\MIT.LICENSE" />
+    <None Include="Scripts\pdf.js\external\jpgjs\LICENSE" />
+    <None Include="Scripts\pdf.js\external\shelljs\LICENSE" />
+    <None Include="Scripts\pdf.js\external\shelljs\package.json" />
+    <None Include="Scripts\pdf.js\external\shelljs\README.md" />
+    <None Include="Scripts\pdf.js\external\webL10n\README.md" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -298,9 +418,12 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
+    <Content Include="Views\FileCabinet\_InfoPartial.cshtml" />
+    <Content Include="Views\FileCabinet\File.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Filters\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -312,7 +435,7 @@
     <Content Include="Views\Home\_LandingPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Shared\_RegisterPartial.cshtml" />
+    <Content Include="Views\Shared\_RegisterUserPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_UserListPartial.cshtml" />
@@ -328,9 +451,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Band\Manage.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Calendar\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\FileCabinet\Index.cshtml" />
@@ -366,9 +486,6 @@
     <Content Include="Views\Shared\Success.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Band\Delete.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Band\_ChangeBandPasswordPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -393,14 +510,8 @@
     <Content Include="Views\Calendar\AddEvent.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Home\Test.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Admin\Bands.cshtml" />
     <Content Include="Views\Admin\_AdminHeaderPartial.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Dashboard\EditPost.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Crazy.cshtml" />
@@ -410,6 +521,65 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_MembersPartial.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\DateTest.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\FileCabinet\UploadFile.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Calendar\EditEvent.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Calendar\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Rolodex\CreateContact.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Rolodex\CreateBandContact.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Rolodex\CreatePersonContact.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Rolodex\CreateVenueContact.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Calendar\Day.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\_RolodexList.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\FileCabinet\Files.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Account\_ChangeAvatarPartial.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Rolodex\EditBand.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Rolodex\EditPeople.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Rolodex\EditVenue.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\FileCabinet\Text.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\FileCabinet\Image.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\FileCabinet\Audio.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\FileCabinet\Video.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

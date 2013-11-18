@@ -2,16 +2,39 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using test.Models.Account;
+using test.Models.Band;
 
-namespace test.Models
+namespace test.Models.Dashboard
 {
+    public enum PostType
+    {
+        Message,
+        Join,
+        Leave,
+        File
+    }
+
     [Table("MessageBoardPost")]
     public class MessageBoardPost
     {
+        public MessageBoardPost() {}
+        public MessageBoardPost(int bandId, int posterId, PostType postType, DateTime postTime, string content)
+        {
+            this.BandId = bandId;
+            this.PosterId = posterId;
+            this.PostType = (int)postType;
+            this.PostTime = postTime;
+            this.Content = content;
+        }
+
         [Key]
         [Required]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int PostId { get; set; }
+
+        [Required]
+        public int PostType { get; set; }
 
         [Required]
         public int BandId { get; set; }
@@ -32,6 +55,17 @@ namespace test.Models
 
     public class MessageBoardPostModel
     {
+        public MessageBoardPostModel() {}
+        public MessageBoardPostModel(int postId, int posterId, string posterName, PostType postType, DateTime postTime, string content)
+        {
+            this.PostId = postId;
+            this.PosterId = posterId;
+            this.PosterName = posterName;
+            this.PostType = postType;
+            this.PostTime = postTime;
+            this.Content = content;
+        }
+
         [Required]
         [Display(Name = "ID")]
         public int PostId { get; set; }
@@ -43,6 +77,9 @@ namespace test.Models
         [Required]
         [Display(Name = "Name")]
         public string PosterName { get; set; }
+
+        [Required]
+        public PostType PostType { get; set; }
 
         [Required]
         [Display(Name = "Time")]
@@ -59,7 +96,7 @@ namespace test.Models
         // model for the post given to the server
         public PostMessageModel PostMessageModel { get; set; }
         // model for the messages returned by the server
-        public List<MessageBoardPostModel> DisplayMessagesModel { get; set; }
+        public PageModel DisplayMessagesModel { get; set; }
     }
 
     public class PostMessageModel
@@ -67,5 +104,12 @@ namespace test.Models
         [Required]
         [DataType(DataType.MultilineText)]
         public string Content { get; set; }
+    }
+
+    public class PageModel
+    {
+        public int PageNumber { get; set; }
+        public int TotalPages { get; set; }
+        public List<MessageBoardPostModel> Posts { get; set; }
     }
 }

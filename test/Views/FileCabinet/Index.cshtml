@@ -6,3 +6,46 @@
 {
     @Html.Partial("_BandHeaderPartial")
 }
+
+<section class="blarg">
+    <h2>Groups</h2>
+
+    <p class="message-success">@ViewBag.SuccessMessage</p>
+    <p class="message-error">@ViewBag.ErrorMessage</p>
+
+    <div ng-app="sortable" ng-controller="SortableController" ng-init="init('/FileCabinet/GetGroups/@ViewBag.BandId')">
+        <table class="pretty" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+                <th ng-click="sort('GroupId')">Group ID</th>
+                <th ng-click="sort('GroupName')">Name</th>
+                <th>Delete</th>
+            </tr>
+
+            <tr ng-repeat="group in data | orderBy : column : descending">
+                    <td>{{ group.GroupId }}</td>
+                    <td><a ng-href="/FileCabinet/{{ group.BandId}}/Files/{{ group.GroupId }}">{{ group.GroupName }}</a>
+                    <td><a ng-href="/FileCabinet/DeleteGroup/{{ group.GroupId }}">Delete</a></td>
+            </tr>
+        </table>
+    </div>
+</section>
+
+<section class="half">
+    <h2>Make a new group</h2>
+    <p class="message-success">@ViewBag.OtherSuccessMessage</p>
+    <p class="message-error">@ViewBag.OtherErrorMessage</p>
+
+    <form action="/FileCabinet/@ViewBag.BandId/CreateGroup" method="post">
+      <label for="groupName">Group name:</label>
+      <input type="text" name="groupName" id="groupName" />
+      <br />
+      <input type="submit" value="Create group" />
+    </form>
+</section>
+
+@section Scripts
+{
+    <script type="text/javascript" src="@Url.Content("/Scripts/angular.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("/Scripts/sortable.js")"></script>
+}
+

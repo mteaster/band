@@ -1,0 +1,17 @@
+﻿@model test.Models.FileCabinet.FileModel
+
+@{
+    ViewBag.Title = "File Cabinet";
+}
+
+@section featured 
+{
+    @Html.Partial("_BandHeaderPartial")
+}
+
+@Html.Partial("_InfoPartial", Model)
+
+<audio controls>
+    <source src="@Url.Action("DownloadAudio", "FileCabinet", new { fileId = Model.FileId })" type="audio/@Model.Content" />
+    <p>Your browser does not support HTML 5 audio element</p>
+</audio>

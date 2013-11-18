@@ -1,0 +1,67 @@
+﻿@{
+    ViewBag.Title = "Edit Band";
+}
+
+@model test.Models.Rolodex.BandContact
+
+@section Scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+@section featured 
+{
+    @Html.Partial("_BandHeaderPartial")
+}
+<img alt="" src="@Url.Action("DownloadBandAvatar", new { contactId = ViewBag.ContactId } )" height="100" width="100" class="photo" />
+@using (Html.BeginForm("EditBand", "Rolodex", new { bandId = ViewBag.BandId }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+    <fieldset>
+        <legend>Edit Form</legend>
+        <ol>
+            <li style="visibility:hidden;">
+                @Html.TextBoxFor(m => m.ContactId)
+                @Html.TextBoxFor(m => m.BandId)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.Name)
+                @Html.EditorFor(m => m.Name)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.PhoneNumber)
+                @Html.EditorFor(m => m.PhoneNumber)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.Email)
+                @Html.EditorFor(m => m.Email)
+            </li>
+            <li> 
+                @Html.LabelFor(m => m.MusicalStyle)
+                @Html.TextBoxFor(m => m.MusicalStyle)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.Notes)
+                @Html.TextBoxFor(m => m.Notes)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.PrimaryPeopleContactId)
+                @Html.DropDownListFor(m => m.PrimaryPeopleContactId, (List<SelectListItem>) band.Controllers.RolodexController.GetSelectList(ViewBag.BandId, "Band"))
+            </li>
+        </ol>
+        <input type="submit" value="Save" />
+    </fieldset>
+}
+
+<h3>Change avatar</h3>
+
+<form action="/Rolodex/UploadAvatar/@Model.ContactId.ToString()/@test.Models.Rolodex.ContactType.Band.ToString()" method="post" enctype="multipart/form-data">
+    <label for="file">Filename:</label>
+    <input type="file" name="file" id="file" />
+    <br />
+    <input type="submit" value="Change Avatar" />
+</form>
+
+
+

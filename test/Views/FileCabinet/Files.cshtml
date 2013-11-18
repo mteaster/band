@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "File Cabinet";
+}
+
+@section featured 
+{
+    @Html.Partial("_BandHeaderPartial")
+}
+
+<h2>@ViewBag.GroupName</h2>
+
+<p class="message-success">@ViewBag.SuccessMessage</p>
+<p class="message-error">@ViewBag.ErrorMessage</p>
+
+@Html.ActionLink("Upload", "UploadFile", new { groupId = ViewBag.GroupId })
+@Html.ActionLink("Back to groups", "Index", new { bandId = ViewBag.BandId })
+
+<div ng-app="sortable" ng-controller="SortableController" ng-init="init('/FileCabinet/GetFiles/@ViewBag.GroupId')">
+    <table class="pretty" border="0" cellpadding="0" cellspacing="0">
+        <tr>
+            <th ng-click="sort('FileId')">File ID</th>
+            <th ng-click="sort('FileName')">Name</th>
+            <th ng-click="sort('FileDescription')">Description</th>
+            <th ng-click="sort('FileType')">Type</th>
+            <th ng-click="sort('UploaderName')">Uploader</th>
+            <th ng-click="sort('ModifiedTime')">Modified</th>
+            <th>Download</th>
+            <th>Delete</th>
+            <th>View</th>
+        </tr>
+
+        <tr ng-repeat="file in data | orderBy : column : descending">
+                <td>{{ file.FileId }}</td>
+                <td>{{ file.FileName }}</td>
+                <td>{{ file.FileDescription }}</td>
+                <td>{{ file.FileType}}</td>
+                <td>{{ file.UploaderName }}</td>
+                <td>{{ file.ModifiedTime }}</td>
+                <td><a ng-href="/FileCabinet/DownloadFile/{{ file.FileId }}">Download</a></td>
+                <td><a ng-href="/FileCabinet/DeleteFile/{{ file.FileId }}">Delete</a></td>
+                <td><a ng-href="/FileCabinet/ViewFile/{{ file.FileId }}">View</a></td>
+        </tr>
+    </table>
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript" src="@Url.Content("/Scripts/angular.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("/Scripts/sortable.js")"></script>
+}
+
