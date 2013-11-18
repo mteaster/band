@@ -93,7 +93,7 @@ namespace band.Controllers
                     database.SaveChanges();
                 }
 
-                TempData["SuccessMessage"] = "we added an event";
+                TempData["SuccessMessage"] = "Event added.";
                 return RedirectToAction("Index", new { bandId = bandId });
             }
 
