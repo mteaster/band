@@ -29,7 +29,6 @@ namespace test.Controllers
                 return RedirectToLocal(returnUrl);
             }
 
-            // If we got this far, something failed, redisplay form
             ModelState.AddModelError("", "The user name or password provided is incorrect.");
             return View(model);
         }
@@ -70,7 +69,6 @@ namespace test.Controllers
                 }
             }
 
-            // If we got this far, something failed, redisplay form
             return View(model);
         }
 
@@ -142,8 +140,7 @@ namespace test.Controllers
         [HttpPost]
         public ActionResult UploadAvatar(HttpPostedFileBase file)
         {
-            //if (file.ContentLength <= 0 || file.ContentLength > 1048576)
-            if (file.ContentLength <= 0)
+            if (file.ContentLength <= 0 || file.ContentLength > 1048576)
             {
                 TempData["ErrorMessage"] = "Something was wrong with the avatar you uploaded.";
             }
