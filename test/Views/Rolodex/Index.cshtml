@@ -8,6 +8,9 @@
     @Html.Partial("_BandHeaderPartial")
 }
 
+<p class="message-success">@ViewBag.SuccessMessage</p>
+<p class="message-error">@ViewBag.ErrorMessage</p>
+
 <form action="/Rolodex/CreateContact/@ViewBag.BandId" method="post">
       <input type="submit" value="Create Contact" />
 </form>
