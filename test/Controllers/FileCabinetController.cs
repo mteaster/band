@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using System.Web.Security;
 using test.Models;
@@ -54,7 +55,7 @@ namespace band.Content
                 return View("Error");
             }
 
-            if (String.IsNullOrEmpty(groupName))
+            if (String.IsNullOrEmpty(groupName) || !Regex.IsMatch(groupName, @"^[a-zA-Z0-9]+$"))
             {
                 TempData["OtherErrorMessage"] = "Invalid group name.";
                 return RedirectToLocal(Request.UrlReferrer.AbsolutePath);
