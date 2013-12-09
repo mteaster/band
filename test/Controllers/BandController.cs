@@ -263,7 +263,7 @@ namespace test.Controllers
             }
             else
             {
-                return File(Server.MapPath("~/App_Data/UserAvatars/default.jpg"), "image/jpeg");
+                return File(Server.MapPath("~/App_Data/BandAvatars/default.jpg"), "image/jpeg");
             }
         }
 

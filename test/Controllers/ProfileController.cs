@@ -237,7 +237,7 @@ namespace band.Controllers
                 }
                 else
                 {
-                    return File(Server.MapPath("~/App_Data/UserAvatars/default.jpg"), "image/jpeg");
+                    return File(Server.MapPath("~/App_Data/Tracks/default.jpg"), "image/jpeg");
                 }
             }
         }
