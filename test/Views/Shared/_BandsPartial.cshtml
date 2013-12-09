@@ -1,57 +1,88 @@
-﻿@model IEnumerable<test.Models.Band.BandModel>
+﻿<div ng-app="super">
+    <div ng-controller="SortableController" ng-init="init('/Band/GetBands')" ng-cloak>
+        <section class="blarg" ng-show="ready && !empty" >
+            <h1 class="five">Your Bands</h1>
+            <h3>These are the bands you're in.</h3>
 
-@if(Model.Any())
-{
-    <hgroup class="title">
-        <h1>Your Bands.</h1>
-        <h2>Pick one of them.</h2>
-    </hgroup>
-    
-    @Html.ActionLink("Create a new band", "Register", "Band")
-    @Html.ActionLink("Join an existing band", "Search", "Band")
+            <input type="button" value="Sort" ng-click="sort('BandName')"/>
 
-    <table class="pretty" border="0" cellpadding="0" cellspacing="0">
-        <tr>
-            <th>@Html.DisplayNameFor(model => model.BandName)</th>
-            <th>@Html.DisplayNameFor(model => model.CreatorName)</th>
-            <th>Leave</th>
-        </tr>
+            <ol ng-cloak class="messages">
+                <li ng-repeat="band in data | orderBy : column : descending">
+                    <div class="post-header">  
+                        <!-- <img class="post-avatar" height="50" width="50" class="photo" alt="" ng-src="{{ band.AvatarUrl }}" /> --> 
+                        <div class="post-info">  
+                            <span class="post-username">{{ band.BandName }}</span><br />
+                            <span class="post-time">{{ band.CreatorName }}</span><br />
+                        </div>
+                    </div>
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>@Html.ActionLink(item.BandName, "Index", "Dashboard", new { bandId = item.BandId }, null)</td>
-            <td>@Html.DisplayFor(modelItem => item.CreatorName)</td>
-            <td>@Html.ActionLink("Leave", "Leave", "Band", new { bandId = item.BandId }, null)</td>
-        </tr>
-    }
+                    <div class="post-content">
+                        <a class="post-link" ng-href="/Dashboard/{{ band.BandId }}">Dashboard</a>
+                        <a class="post-link" ng-href="/Profile/{{ band.BandId }}">Profile</a>
+                        <a class="post-link" ng-href="/Band/Leave/{{ band.BandId }}">Leave</a>
+                    </div>
+                </li>
+            </ol>
 
-    </table>
-}
-else
-{
-    <hgroup class="title">
-        <h1>You're not in any bands!</h1>
-    </hgroup>
-    
-    <h3>Do something about it:</h3>
-    <ol class="round">
-        <li class="one">
-            <h2>@Html.ActionLink("Join a band", "Search", "Band")</h2>
-            Search for bands and join one.
-        </li>
+            @Html.ActionLink("Create a new band", "Register", "Band")
+        </section>
 
-        <li class="two">
-            <h2>@Html.ActionLink("Create a band", "Register", "Band")</h2>
-            Start a new band and get your friends to join.
-        </li>
+        <section class="blarg" ng-show="ready && empty">
+            <h1 class="five">You're not in any bands!</h1>
+            <h3>Here are your options:</h3>
 
-        <li class="three">
-            <h2>Leave</h2>
-            And never come back.
-        </li>
-    </ol>
-}
+            <ol class="round">
+                <li class="one">
+                    <h2>Join!</h2>
+                    Search for your band and join it.
+                </li>
+
+                <li class="two">
+                    <h2>@Html.ActionLink("Create!", "Register", "Band")</h2>
+                    Start a new band and get your bandmates to join.
+                </li>
+
+                <li class="three">
+                    <h2>Leave</h2>
+                    And never come back.
+                </li>
+            </ol>
+        </section>
+    </div>
+
+    <div ng-controller="SearchableController" ng-init="init('/Band/SearchBands')" ng-cloak>
+        <section class="half">
+            <h1 class="five">Search</h1>
+            <h3>Type in a band name to search for your band.</h3>
+
+            <input type="text" value="" name="BandName" id="BandName" ng-model="criteria"/>
+            <input type="submit" value="Search" ng-click="search()"/>
+            <br />
+
+            <span ng-show="searched && empty">No bands found</span>
+
+            <div ng-show="searched && !empty">
+                <input type="button" value="Sort" ng-click="sort('BandName')"/>
+                <ol class="messages">
+                    <li ng-repeat="band in data | orderBy : column : descending">
+                        <div class="post-header">  
+                            <!-- <img class="post-avatar" height="50" width="50" class="photo" alt="" ng-src="{{ band.AvatarUrl }}" /> --> 
+                            <div class="post-info">  
+                                <span class="post-username">{{ band.BandName }}</span><br />
+                                <span class="post-time">{{ band.CreatorName }}</span><br />
+                            </div>
+                        </div>
+
+                        <div class="post-content">
+                            <a class="post-link" ng-href="/Profile/{{ band.BandId }}">Profile</a>
+                            <a class="post-link" ng-href="/Band/Join/{{ band.BandId }}">Join</a>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+        </section>
+    </div>
+</div>
 
 @if(Roles.IsUserInRole("Administrator"))
 {

@@ -6,6 +6,7 @@ using test.Stuff;
 
 namespace band.Controllers
 {
+    [Authorize]
     public class CalendarController : Controller
     {
         public ActionResult Index(int bandId)
@@ -39,7 +40,7 @@ namespace band.Controllers
 
             DayModel model = new DayModel(day, month, year);
             model.Events = CalendarUtil.EventsForDay(bandId, day, month, year);
-
+            
             return View(model);
         }
 
@@ -93,7 +94,7 @@ namespace band.Controllers
                     database.SaveChanges();
                 }
 
-                TempData["SuccessMessage"] = "Event added.";
+                TempData["SuccessMessage"] = "we added an event";
                 return RedirectToAction("Index", new { bandId = bandId });
             }
 

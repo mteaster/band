@@ -1,8 +1,56 @@
-﻿@{
-    ViewBag.Title = "Index";
+﻿@model test.Models.Budget.IndexFilters
+
+@{
+    ViewBag.Page = "Budget";
+    ViewBag.Title = ViewBag.Page + " - " + ViewBag.BandName;
 }
+
+<script>
+    function submitform() {
+        $('form').submit();
+    }
+</script>
 
 @section featured 
 {
     @Html.Partial("_BandHeaderPartial")
 }
+
+@Html.ActionLink("Manage Merch", "MerchList", new { bandId = ViewBag.BandId })
+@Html.ActionLink("Enter Account Payable", "AccountPayable", new { bandId = ViewBag.BandId })
+@Html.ActionLink("Enter Account Receivable", "AccountReceivable", new { bandId = ViewBag.BandId })
+
+<h4>Filters</h4>
+@using (Html.BeginForm("Index", "Budget", new { bandId = ViewBag.BandId, sort = "DATE" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+    <fieldset>
+        <legend>Filters</legend>
+        Start Date: 
+        @Html.EditorFor(m => m.StartDT, new { maxlength = 10, @onchange = "submitform();" }) 
+        to
+        End Date: 
+        @Html.EditorFor(m => m.EndDT, new { maxlength = 10, @onchange = "submitform();" })
+        <br />
+        Category: 
+        @Html.TextBoxFor(m => m.Category, new { @onchange = "submitform();" })
+        Paid: 
+        @Html.CheckBoxFor(m => m.Paid, new { @onchange = "submitform();" })
+        Unpaid: 
+        @Html.CheckBoxFor(m => m.Unpaid, new { @onchange = "submitform();" })
+        <br />
+
+    </fieldset>
+      
+}
+<br />
+<br />
+Total AR = @ViewBag.TotalAR | Total AP = @ViewBag.TotalAP | Difference = <span style ="color:@ViewBag.DifferenceColor">@ViewBag.TotalDifference</span>
+<br />
+<br />
+<h4>Accounts Payable</h4>
+@{ Html.RenderAction("AccountsPayableList", new { bandId = ViewBag.BandId, filters = ViewBag.Filters, sort = ViewBag.Sort }); }
+<br />
+<h4>Accounts Receivable</h4>
+@{ Html.RenderAction("AccountsReceivableList", new { bandId = ViewBag.BandId, filters = ViewBag.Filters, sort = ViewBag.Sort }); }

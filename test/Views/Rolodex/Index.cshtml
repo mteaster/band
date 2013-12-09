@@ -1,5 +1,6 @@
 ﻿@{
-    ViewBag.Title = "Rolodex";
+    ViewBag.Page = "Rolodex";
+    ViewBag.Title = ViewBag.Page + " - " + ViewBag.BandName;
 }
 
 @section featured 
@@ -7,6 +8,10 @@
     @Html.Partial("_BandHeaderPartial")
 }
 
-<div>@Html.ActionLink("Create Contact", "CreateContact", new { bandId = ViewBag.BandId })</div>
+<form action="/Rolodex/CreateContact/@ViewBag.BandId" method="post">
+      <input type="submit" value="Create Contact" />
+</form>
+
+<br>
 
 @{Html.RenderAction("RolodexList", "Rolodex", new { bandId = ViewBag.BandId });}

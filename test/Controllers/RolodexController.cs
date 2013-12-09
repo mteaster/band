@@ -10,6 +10,7 @@ using WebMatrix.WebData;
 
 namespace band.Controllers
 {
+    [Authorize]
     public class RolodexController : Controller
     {
         //
@@ -567,7 +568,7 @@ namespace band.Controllers
         [HttpPost]
         public ActionResult UploadAvatar(int contactId, ContactType contactType, HttpPostedFileBase file)
         {
-            if (file.ContentLength <= 0 || file.ContentLength > 52428800)
+            if (file.ContentLength <= 0 || file.ContentLength > 1048576)
             {
                 ViewBag.ErrorMessage = "Something was wrong with the avatar you uploaded.";
                 return View("Error");

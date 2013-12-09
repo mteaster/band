@@ -7,18 +7,19 @@
     @Html.Partial("_BandHeaderPartial")
 }
 
-<h2>@ViewBag.GroupName</h2>
+<h1 class="five">@ViewBag.GroupName</h1>
 
 <p class="message-success">@ViewBag.SuccessMessage</p>
 <p class="message-error">@ViewBag.ErrorMessage</p>
 
 @Html.ActionLink("Upload", "UploadFile", new { groupId = ViewBag.GroupId })
-@Html.ActionLink("Back to groups", "Index", new { bandId = ViewBag.BandId })
+@Html.ActionLink("Back to Groups", "Index", new { bandId = ViewBag.BandId })
 
-<div ng-app="sortable" ng-controller="SortableController" ng-init="init('/FileCabinet/GetFiles/@ViewBag.GroupId')">
-    <table ng-cloak class="pretty" border="0" cellpadding="0" cellspacing="0">
+<div ng-app="super" ng-controller="SortableController" ng-cloak ng-init="init('/FileCabinet/GetFiles/@ViewBag.GroupId')">
+    <span ng-show="ready && empty">No files found</span>
+
+    <table ng-show="ready && !empty" class="pretty" border="0" cellpadding="0" cellspacing="0">
         <tr>
-            <th ng-click="sort('FileId')">File ID</th>
             <th ng-click="sort('FileName')">Name</th>
             <th ng-click="sort('FileDescription')">Description</th>
             <th ng-click="sort('FileType')">Type</th>
@@ -30,7 +31,6 @@
         </tr>
 
         <tr ng-repeat="file in data | orderBy : column : descending">
-                <td>{{ file.FileId }}</td>
                 <td>{{ file.FileName }}</td>
                 <td>{{ file.FileDescription }}</td>
                 <td>{{ file.FileType}}</td>
@@ -46,6 +46,6 @@
 @section Scripts
 {
     <script type="text/javascript" src="@Url.Content("/Scripts/angular.min.js")"></script>
-    <script type="text/javascript" src="@Url.Content("/Scripts/sortable.js")"></script>
+    <script type="text/javascript" src="@Url.Content("/Scripts/super.js")"></script>
 }
 

@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using test.Models.Account;
 using test.Models.Band;
+using System.Web.Mvc;
+using System.Text.RegularExpressions;
 
 namespace test.Models.Dashboard
 {
@@ -63,7 +65,9 @@ namespace test.Models.Dashboard
             this.PosterName = posterName;
             this.PostType = postType;
             this.PostTime = postTime;
-            this.Content = content;
+
+            this.Content = Regex.Replace(content, @"@link:(?<url>.*)\b", "<a href=\"${url}\">${url}</a>", 
+                                            RegexOptions.IgnoreCase).Replace("\n", "<br />");
         }
 
         [Required]

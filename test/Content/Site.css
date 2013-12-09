@@ -272,7 +272,7 @@ ul#menu
 /* page titles */
 hgroup.title
 {
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 hgroup.title h1, hgroup.title h2
@@ -372,7 +372,6 @@ aside
     aside ul
     {
         list-style: none;
-        padding: 0;
     }
 
         aside ul li
@@ -497,8 +496,11 @@ input, textarea
 textarea
 {
     font-family: inherit;
-    width: 500px;
+    width: 100%;
+    resize: vertical;
+    padding:3px;
 }
+
 
     input:focus, textarea:focus
     {
@@ -667,6 +669,14 @@ td
     border: 0 none;
 }
 
+table.contact
+{
+   border:1px solid #C3C3C3; 
+   width:100%;
+   background: url("../Images/contactBg.png") no-repeat;
+}
+
+
 tr.pager td
 {
     padding: 0 0.25em 0 0;
@@ -674,9 +684,18 @@ tr.pager td
 
 /* MIKE'S CSS ADDITIONS */
 
-.ng-cloak 
-{ 
-    display:none;
+/* 
+  Allow angular.js to be loaded in body, hiding cloaked elements until 
+  templates compile.  The !important is important given that there may be 
+  other selectors that are more specific or come later and might alter display.  
+ */
+[ng\:cloak], [ng-cloak], .ng-cloak {
+  display: none !important;
+}
+
+.five
+{
+    margin-bottom: 5px;
 }
 
 a.right
@@ -760,12 +779,28 @@ ol.groups li
     padding: 10px 20px 10px 20px;
 }
 
+
+/* whitebox */
+
+div.whitebox
+{
+    border: 1px solid #C3C3C3;
+    padding: 12px;
+    margin-bottom: 10px;
+    background: white;
+}
+
+img.avatar
+{
+    border: 1px solid black;
+}
+
 /* message board stuff */
 
 ol.messages
 {
     padding: 0;
-    margin: 0;   
+    margin: 0;  
 }
 
 ol.messages li
@@ -773,7 +808,7 @@ ol.messages li
     border: 1px solid #C3C3C3;
     list-style-type: none;
     padding: 12px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     background: white;
 }
 
@@ -814,12 +849,42 @@ span.post-username
 
 div.post-content
 {
-    padding: 10px 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 a.post-link
 {
     padding: 0 3px 0 0;
+}
+
+/* member list */
+
+span.member-display-name
+{
+    color: #000000;
+    font-size: 1.2em;
+}
+
+span.member-user-name
+{
+    font-weight: normal;
+    font-size: small;
+}
+
+/* profile stuff */
+
+div.track-content
+{
+    padding: 10px 0;
+}
+
+/* misc stuff */
+
+a.file-group
+{
+    color: #000000;
+    font-size: 1.6em; 
 }
 
 table.pretty
@@ -844,6 +909,36 @@ table.pretty th
     padding: 5px;
     vertical-align: top;
 	text-align: left;
+	font-weight: bold;
+}
+
+table.pretty th:hover
+{
+    background-color: #E2E2E2;
+}
+
+table.event
+{
+    background-color: #FFFFFF;
+    border: 1px solid #C3C3C3;
+    border-collapse: collapse;
+    margin-top: 0.75em;
+    margin-bottom: 0.75em;
+    width:100%;
+}
+
+table.event td
+{
+    padding: 5px;
+    text-align: left;
+    vertical-align: top;
+}
+
+table.event th
+{
+    padding: 5px;
+    vertical-align: top;
+	text-align: center;
 	font-weight: bold;
 }
 

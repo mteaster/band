@@ -1,12 +1,10 @@
 ﻿@model test.Models.Band.BandPasswordModel
 
 @{
-    ViewBag.Title = "Manage '" + ViewBag.BandName + "'";
+    ViewBag.Title = "Manage - " + ViewBag.BandName;
 }
 
-<hgroup class="title">
-    <h1>@ViewBag.Title.</h1>
-</hgroup>
+<h1 class="five">Manage '@ViewBag.BandName'</h1>
 
 <p class="message-success">@ViewBag.SuccessMessage</p>
 <p class="message-error">@ViewBag.ErrorMessage</p>
@@ -14,8 +12,11 @@
 <section class="half">
     @Html.Partial("_ChangeBandPasswordPartial")
 </section>
+
 <section class="half">
     @Html.Partial("_ChangeBandNamePartial")
+    <br />
+    @Html.Partial("_ChangeAvatarPartial")
     <br />
     @Html.ActionLink("Delete", "Delete", new { bandId = ViewBag.BandId })
 </section>

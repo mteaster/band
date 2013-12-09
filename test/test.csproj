@@ -171,9 +171,10 @@
     <Compile Include="Controllers\BudgetController.cs" />
     <Compile Include="Controllers\CalendarController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\FileCabinetController.cs" />
-    <Compile Include="Controllers\OnlineController.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\RolodexController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Filters\TestFilters.cs" />
@@ -182,6 +183,7 @@
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\BandModels.cs" />
+    <Compile Include="Models\BudgetModels.cs" />
     <Compile Include="Models\CalendarModels.cs" />
     <Compile Include="Models\RolodexModels.cs" />
     <Compile Include="Models\FileCabinetModels.cs" />
@@ -196,8 +198,6 @@
     <Compile Include="Stuff\MessageBoardUtil.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\bootstrap-timepicker.min.css" />
-    <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -255,9 +255,23 @@
     <Content Include="Content\pdf.js\viewer.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Images\contactBg.png" />
+    <Content Include="pager\first.png" />
+    <Content Include="pager\last.png" />
+    <Content Include="pager\next.png" />
+    <Content Include="pager\pager.css" />
+    <Content Include="pager\prev.png" />
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\bootstrap-timepicker.min.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Scripts\jquery-2.0.3.intellisense.js" />
+    <Content Include="Scripts\jquery-2.0.3.js" />
+    <Content Include="Scripts\jquery-2.0.3.min.js" />
+    <Content Include="Scripts\jquery.tablesorter.min.js" />
+    <Content Include="Scripts\jquery.tablesorter.pager.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\super.js" />
+    <Content Include="Scripts\searchable.js" />
     <Content Include="Scripts\pdf.js\compatibility.js" />
     <Content Include="Scripts\pdf.js\debugger.js" />
     <Content Include="Scripts\pdf.js\download_manager.js" />
@@ -363,13 +377,10 @@
     <Content Include="Scripts\pdf.js\viewer.js" />
     <Content Include="Scripts\sortable.js" />
     <Content Include="Scripts\messageboard.js" />
+    <Content Include="Scripts\tablesorter.txt" />
     <Content Include="Scripts\test.js" />
-    <Content Include="Scripts\jquery-1.7.1-vsdoc.js" />
-    <Content Include="Scripts\jquery-1.7.1.js" />
-    <Content Include="Scripts\jquery-1.7.1.min.js" />
     <Content Include="Scripts\jquery-ui-1.8.20.js" />
     <Content Include="Scripts\jquery-ui-1.8.20.min.js" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -380,6 +391,7 @@
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
     <Content Include="Views\FileCabinet\PDF.cshtml" />
+    <Content Include="Scripts\jquery-2.0.3.min.map" />
     <None Include="Scripts\pdf.js\external\jasmine\MIT.LICENSE" />
     <None Include="Scripts\pdf.js\external\jpgjs\LICENSE" />
     <None Include="Scripts\pdf.js\external\shelljs\LICENSE" />
@@ -421,6 +433,21 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\FileCabinet\_InfoPartial.cshtml" />
     <Content Include="Views\FileCabinet\File.cshtml" />
+    <Content Include="Views\Budget\AccountReceivable.cshtml" />
+    <Content Include="Views\Budget\_AccountsPayableListPartial.cshtml" />
+    <Content Include="Views\Budget\_AccountsReceivableListPartial.cshtml" />
+    <Content Include="Views\Budget\MerchList.cshtml" />
+    <Content Include="Views\Budget\AccountPayable.cshtml" />
+    <Content Include="Views\Profile\_UploadTrackPartial.cshtml" />
+    <Content Include="Views\Profile\Index.cshtml" />
+    <Content Include="Views\Band\_ChangeAvatarPartial.cshtml" />
+    <Content Include="Views\Shared\_TestHeaderPartial.cshtml" />
+    <Content Include="Views\Band\SuperSearch.cshtml" />
+    <Content Include="Views\Profile\EditBio.cshtml" />
+    <Content Include="Views\Budget\AddMerch.cshtml" />
+    <Content Include="Views\Budget\_MerchandiseListPartial.cshtml" />
+    <Content Include="Views\Budget\EditMerch.cshtml" />
+    <Content Include="Views\Profile\_EditBioPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -457,7 +484,7 @@
     <Content Include="Views\FileCabinet\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Online\Index.cshtml" />
+    <Content Include="Views\Profile\UploadTrack.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Rolodex\Index.cshtml" />
@@ -519,9 +546,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_MembersPartial.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Home\DateTest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\FileCabinet\UploadFile.cshtml" />

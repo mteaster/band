@@ -12,7 +12,7 @@
 <p class="message-success">@ViewBag.SuccessMessage</p>
 <p class="message-error">@ViewBag.ErrorMessage</p>
 
-<h2>@Model.Date.ToString("D")</h2>
+<h1 class="five">@Model.Date.ToString("D")</h1>
 
 @Html.ActionLink("Add event", "AddEvent", "Calendar", new { bandId = ViewBag.BandId, day = ViewBag.Day, month = ViewBag.Month, year = ViewBag.Year }, null)
 @Html.ActionLink("Back to Monthly View", "Month", new { bandId = ViewBag.BandId, month = Model.Date.Month, year = Model.Date.Year })
@@ -24,29 +24,43 @@
     <h2>No events</h2>
 }
 else
-{   
-    <table class="pretty" border="0" cellpadding="0" cellspacing="0">
-        <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Time</th>
-            <th>Description</th>
-            <th>Edit</th>
-            <th>Delete</th>
-        </tr>
+{       
+    foreach (var item in Model.Events)
+    {
+        string eventTime = item.EventTime.ToString("t");
+        
+        <table class="event">
+            <tr>                
+                <th style="width:10%; text-align:left;">@eventTime</th>
 
-        @foreach (var item in Model.Events)
-        {
-            <tr>
-                <td>@Html.DisplayFor(modelItem => item.EventId)</td>
-                <td>@Html.DisplayFor(modelItem => item.EventTitle)</td>
-                <td>@Html.DisplayFor(modelItem => item.EventTime)</td>
-                <td>@Html.DisplayFor(modelItem => item.EventDescription)</td>
-                <td>@Html.ActionLink("Edit", "EditEvent", new { bandId = ViewBag.BandId, eventId = item.EventId })</td>
-                <td>@Html.ActionLink("Delete", "DeleteEvent", new { eventId = item.EventId })</td>
+                <th />
+
             </tr>
-        }
-    </table>
+            <tr>
+                <td style="width:100%; text-align:center; font-weight:bold;">@item.EventTitle </td>
+            </tr>
+
+            <tr />
+            <tr />
+
+            <tr>
+                <td style="width:100%">
+                    @item.EventDescription
+                </td>
+
+                <td />
+
+            </tr>
+            <tr>
+                <td  style="width:100%">
+                    @Html.ActionLink("Edit", "EditEvent", new { bandId = ViewBag.BandId, eventId = item.EventId }) / @Html.ActionLink("Delete", "DeleteEvent", new { eventId = item.EventId })
+                </td>
+
+                <td />
+
+            </tr>
+        </table>
+    }
 }
 
 <br />

@@ -12,7 +12,7 @@
                     @if (item.PostType == test.Models.Dashboard.PostType.Message)
                     {
                         <div class="post-header">  
-                            <img class="post-avatar" alt="" src="@Url.Action("DownloadAvatar", "Account", new { userId = item.PosterId})" height="50" width="50" />
+                            <!-- <img class="post-avatar" alt="" src="@Url.Action("DownloadAvatar", "Account", new { userId = item.PosterId})" height="50" width="50" /> -->
                                    
                             <div class="post-info">  
                                 <span class="post-username">@Html.DisplayFor(modelItem => item.PosterName)</span><br />
@@ -25,7 +25,7 @@
                         if (item.PosterId == WebSecurity.CurrentUserId || Roles.IsUserInRole("Administrator"))
                         {
                             <a class="post-link" href="javascript:initiateEdit(@item.PostId);">Edit</a>
-                            @Html.ActionLink("Delete", "DeletePost", "Dashboard", new { PostId = item.PostId }, new { @class = "messageBoardLink" })
+                            @Html.ActionLink("Delete", "DeletePost", "Dashboard", new { PostId = item.PostId }, new { @class = "post-link" })
                         }
                     }
                     else

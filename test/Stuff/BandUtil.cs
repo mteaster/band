@@ -82,8 +82,6 @@ namespace test.Stuff
             }
         }
 
-
-
         public static bool Join(int bandId, string password)
         {
             using (DatabaseContext database = new DatabaseContext())
@@ -241,15 +239,13 @@ namespace test.Stuff
                               join u in database.UserProfiles
                               on b.MemberId equals u.UserId
                               where b.BandId == bandId
-                              select new { u.UserName, u.DisplayName };
+                              select new { u.UserId, u.UserName, u.DisplayName };
 
                 List<MemberModel> memberModels = new List<MemberModel>();
 
                 foreach (var result in results)
                 {
-                    MemberModel memberModel = new MemberModel();
-                    memberModel.MemberDisplayName = result.DisplayName;
-                    memberModel.MemberUserName = result.UserName;
+                    MemberModel memberModel = new MemberModel(result.UserId, result.UserName, result.DisplayName);
                     memberModels.Add(memberModel);
                 }
 
@@ -343,7 +339,7 @@ namespace test.Stuff
             }
         }
 
-        public static List<BandModel> SearchByName(String term)
+        public static List<SuperBandModel> SearchByName(String term)
         {
             using (DatabaseContext database = new DatabaseContext())
             {
@@ -353,11 +349,11 @@ namespace test.Stuff
                               where b.BandName.Contains(term)
                               select new { b.BandId, b.BandName, u.UserName };
 
-                List<BandModel> bands = new List<BandModel>();
+                List<SuperBandModel> bands = new List<SuperBandModel>();
 
                 foreach (var result in results)
                 {
-                    bands.Add(new BandModel(result.BandId, result.BandName, result.UserName, null));
+                    bands.Add(new SuperBandModel(result.BandId, result.BandName, result.UserName));
                 }
 
                 return bands;

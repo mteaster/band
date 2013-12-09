@@ -60,6 +60,38 @@ namespace test.Models.Band
         public virtual UserProfile MemberProfile { get; set; }
     }
 
+    public class SuperBandModel
+    {
+        public SuperBandModel() { }
+
+        public SuperBandModel(int BandId, string BandName, string CreatorName)
+        {
+            this.BandId = BandId;
+            this.BandName = BandName;
+            this.CreatorName = CreatorName;
+            this.Members = Members;
+            this.AvatarUrl = "/Band/DownloadAvatar/" + BandId;
+        }
+
+        [Required]
+        [Display(Name = "ID")]
+        public int BandId { get; set; }
+
+        [Required]
+        [Display(Name = "Band")]
+        public string BandName { get; set; }
+
+        [Required]
+        [Display(Name = "Creator")]
+        public string CreatorName { get; set; }
+
+        [Required]
+        [Display(Name = "Members")]
+        public string Members { get; set; }
+
+        public string AvatarUrl { get; set; }
+    }
+
     public class BandModel
     {
         public BandModel() {}
@@ -92,7 +124,7 @@ namespace test.Models.Band
     public class SearchViewModel
     {
         public SearchBandModel searchModel { get; set; }
-        public IEnumerable<BandModel> resultsModel { get; set; }
+        public IEnumerable<SuperBandModel> resultsModel { get; set; }
     }
 
     public class ChangeBandNameModel
@@ -151,12 +183,16 @@ namespace test.Models.Band
 
     public class MemberModel
     {
-        [Required]
-        [Display(Name = "Display name")]
-        public string MemberDisplayName { get; set; }
+        public MemberModel() {}
+        public MemberModel(int memberId, string memberUserName, string memberDisplayName)
+        {
+            this.MemberId = memberId;
+            this.MemberUserName = memberUserName;
+            this.MemberDisplayName = memberDisplayName;
+        }
 
-        [Required]
-        [Display(Name = "User name")]
+        public int MemberId { get; set; }
         public string MemberUserName { get; set; }
+        public string MemberDisplayName { get; set; }
     }
 }

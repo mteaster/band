@@ -1,10 +1,9 @@
 @model test.Models.Calendar.MonthModel
 
-
 @{
-    ViewBag.Title = "Calendar";
+    ViewBag.Page = "Calendar";
+    ViewBag.Title = ViewBag.Page + " - " + ViewBag.BandName;
 }
-
 
 @section featured 
 {
@@ -60,7 +59,10 @@
     }
     #calendar-table td:hover
     {
-        background: #CCFFFF !important;
+        background: -webkit-linear-gradient(bottom, #D9FFFF 27%, #63FFF7 98%); /* For Safari */
+        background: -o-linear-gradient(bottom, #D9FFFF 27%, #63FFF7 98%); /* For Opera 11.1 to 12.0 */
+        background: -moz-linear-gradient(bottom, #D9FFFF 27%, #63FFF7 98%); /* For Firefox 3.6 to 15 */
+        background: linear-gradient(to bottom, #D9FFFF 27%, #63FFF7 98%); /* Standard syntax (must be last)*/ 
     }
     #calendar-table td:active
     {
@@ -72,7 +74,7 @@
     }
     #calendar-table td a:hover
     {
-        background-color: #CCFFFF;
+        background-color: white;
     }
     #calendar-table td a:active
     {
@@ -97,7 +99,11 @@
     }
     td.event
     {
-        background-color: #9EB2CB !important;
+        background: -webkit-linear-gradient(bottom, #BACFFF 27%, #63A1FF 98%); /* For Safari */
+        background: -o-linear-gradient(bottom, #BACFFF 27%, #63A1FF 98%); /* For Opera 11.1 to 12.0 */
+        background: -moz-linear-gradient(bottom, #BACFFF 27%, #63A1FF 98%); /* For Firefox 3.6 to 15 */
+        background: linear-gradient(to bottom, #BACFFF 27%, #63A1FF 98%); /* Standard syntax (must be last)*/ 
+
     }
     td.noday
     {
@@ -187,7 +193,10 @@
                 
                     if(hasEvent)
                     { 
-                            <td style="background:#A7CFFF;">
+                            <td style="background: -webkit-linear-gradient(bottom, #BACFFF 27%, #63A1FF 98%); /* For Safari */
+                                background: -o-linear-gradient(bottom, #BACFFF 27%, #63A1FF 98%%); /* For Opera 11.1 to 12.0 */
+                                background: -moz-linear-gradient(bottom, #BACFFF 27%, #63A1FF 98%); /* For Firefox 3.6 to 15 */
+                                background: linear-gradient(to bottom, #BACFFF 27%, #63A1FF 98%); /* Standard syntax (must be last)*/ ">
                                 @Html.ActionLink(@currentDay.ToString(), "Day", new { bandId = ViewBag.bandId, day = currentDay, month = Model.CurrentMonth, year = Model.CurrentMonthYear })
                             </td>
                     }

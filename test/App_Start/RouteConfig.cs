@@ -14,21 +14,61 @@ namespace test
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                name: "Search Bands",
+                url: "Band/SearchBands/{criteria}",
+                defaults: new { controller = "Band", action = "SearchBands" }
+            );
+
+            routes.MapRoute(
+                name: "Edit Bio",
+                url: "Profile/EditBio/{bandId}",
+                defaults: new { controller = "Profile", action = "EditBio" },
+                constraints: new { bandId = @"\d+" }
+            );
+            
+            routes.MapRoute(
+                name: "Upload Track",
+                url: "Profile/UploadTrack/{bandId}",
+                defaults: new { controller = "Profile", action = "UploadTrack" },
+                constraints: new { bandId = @"\d+" }
+            );
+
+            routes.MapRoute(
+                name: "Get Bands",
+                url: "Band/GetBands",
+                defaults: new { controller = "Band", action = "GetBands" }
+            );
+
+            routes.MapRoute(
+                name: "Upload Band Avatar",
+                url: "Band/UploadAvatar/{bandId}",
+                defaults: new { controller = "Band", action = "UploadAvatar" },
+                constraints: new { bandId = @"\d+" }
+            );
+
+            routes.MapRoute(
                 name: "Download Band Avatar",
+                url: "Band/DownloadAvatar/{bandId}",
+                defaults: new { controller = "Band", action = "DownloadAvatar" },
+                constraints: new { bandId = @"\d+" }
+            );
+
+            routes.MapRoute(
+                name: "Download Band Contact Avatar",
                 url: "Rolodex/DownloadBandAvatar/{contactId}",
                 defaults: new { controller = "Rolodex", action = "DownloadBandAvatar" },
                 constraints: new { contactId = @"\d+" }
             );
 
             routes.MapRoute(
-                name: "Download Venue Avatar",
+                name: "Download Venue Contact Avatar",
                 url: "Rolodex/DownloadVenueAvatar/{contactId}",
                 defaults: new { controller = "Rolodex", action = "DownloadVenueAvatar" },
                 constraints: new { contactId = @"\d+" }
             );
 
             routes.MapRoute(
-                name: "Download People Avatar",
+                name: "Download People Contact Avatar",
                 url: "Rolodex/DownloadPeopleAvatar/{contactId}",
                 defaults: new { controller = "Rolodex", action = "DownloadPeopleAvatar" },
                 constraints: new { contactId = @"\d+" }
@@ -84,6 +124,20 @@ namespace test
             );
 
             routes.MapRoute(
+                name: "Get Tracks",
+                url: "Profile/GetTracks/{bandId}",
+                defaults: new { controller = "Profile", action = "GetTracks" },
+                constraints: new { bandId = @"\d+" }
+            );
+
+            routes.MapRoute(
+                name: "Delete Track",
+                url: "Profile/DeleteTrack/{trackId}",
+                defaults: new { controller = "Profile", action = "DeleteTrack" },
+                constraints: new { trackId = @"\d+" }
+            );
+
+            routes.MapRoute(
                 name: "Get Files",
                 url: "FileCabinet/GetFiles/{groupId}",
                 defaults: new { controller = "FileCabinet", action = "GetFiles" },
@@ -95,6 +149,20 @@ namespace test
                 url: "FileCabinet/GetGroups/{bandId}",
                 defaults: new { controller = "FileCabinet", action = "GetGroups" },
                 constraints: new { bandId = @"\d+" }
+            );
+
+            routes.MapRoute(
+                name: "Download Track Audio",
+                url: "Profile/DownloadTrackAudio/{trackId}",
+                defaults: new { controller = "Profile", action = "DownloadTrackAudio" },
+                constraints: new { trackId = @"\d+" }
+            );
+
+            routes.MapRoute(
+                name: "Download Track Image",
+                url: "Profile/DownloadTrackImage/{trackId}",
+                defaults: new { controller = "Profile", action = "DownloadTrackImage" },
+                constraints: new { trackId = @"\d+" }
             );
 
             routes.MapRoute(
@@ -184,6 +252,13 @@ namespace test
             );
 
             routes.MapRoute(
+                name: "Band Profile",
+                url: "Band/Profile/{bandId}",
+                defaults: new { controller = "Band", action = "Profile" },
+                constraints: new { bandId = @"\d+" }
+            );
+
+            routes.MapRoute(
                 name: "Join Band",
                 url: "Band/Join/{bandId}",
                 defaults: new { controller = "Band", action = "Join" },
@@ -260,10 +335,11 @@ namespace test
                 constraints: new { bandId = @"\d+" }
             );
 
+
             routes.MapRoute(
-                name: "Online",
-                url: "Online/{bandId}",
-                defaults: new { controller = "Online", action = "Index" },
+                name: "Profile",
+                url: "Profile/{bandId}",
+                defaults: new { controller = "Profile", action = "Index" },
                 constraints: new { bandId = @"\d+" }
             );
 

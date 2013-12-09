@@ -1,7 +1,8 @@
 ﻿@model test.Models.Dashboard.DashboardViewModel
 
 @{
-    ViewBag.Title = "Dashboard";
+    ViewBag.Page = "Dashboard";
+    ViewBag.Title = ViewBag.Page + " - " + ViewBag.BandName;
 }
 
 @section featured 
@@ -10,25 +11,20 @@
 }
 
 <article>
-    <hgroup class="title">
-        <h1>Message Board.</h1>
-        <h2>Share messages with your band.</h2>
-    </hgroup>
+    <h1 class="five">Message Board</h1>
 
     <p class="message-success">@ViewBag.SuccessMessage</p>
     <p class="message-error">@ViewBag.ErrorMessage</p>
 
     @Html.Partial("_PostMessagePartial", new ViewDataDictionary(ViewData) { Model = Model.PostMessageModel } )
     @Html.Partial("_DisplayMessagesPartial", new ViewDataDictionary(ViewData) { Model = Model.DisplayMessagesModel } )
-
 </article>
 
 <aside>
-    <h1>Members.</h1>
+    <h1 class="five">Members</h1>
 
     @{ Html.RenderAction("Members", "Band", new { bandId = ViewBag.BandId }); }
 </aside>
-
 
 @section scripts
 {
