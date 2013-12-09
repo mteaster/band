@@ -54,6 +54,12 @@ namespace band.Content
                 return View("Error");
             }
 
+            if (String.IsNullOrEmpty(groupName))
+            {
+                TempData["OtherErrorMessage"] = "Invalid group name.";
+                return RedirectToLocal(Request.UrlReferrer.AbsolutePath);
+            }
+
             using (DatabaseContext database = new DatabaseContext())
             {
                 if (database.FileGroups.Where(f => f.BandId == bandId && f.GroupName == groupName).Any())
