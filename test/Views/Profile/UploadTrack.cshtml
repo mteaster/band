@@ -1,0 +1,15 @@
+﻿@{
+    ViewBag.Title = "Upload Track - " + ViewBag.BandName;
+}
+
+@section featured 
+{
+    @Html.Partial("_BandHeaderPartial")
+}
+
+<h2>Upload Track</h2>
+
+<p class="message-success">@ViewBag.SuccessMessage</p>
+<p class="message-error">@ViewBag.ErrorMessage</p>
+
+@Html.Partial("_UploadTrackPartial")

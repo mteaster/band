@@ -1,0 +1,78 @@
+﻿@model IEnumerable<test.Models.Budget.AccountPayables>
+
+<script type="text/javascript" src="../../Scripts/jquery.tablesorter.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#AccountPayableTable").tablesorter();
+    }
+);
+
+    $(function(){
+
+        $(document).on("click","input.chks", function (e) {
+            var _this=$(this);
+            var isChecked = _this.is(':checked');
+            $.post("@Url.Action("UpdateAccountPayable","Budget")?id="+_this.attr("id")+
+                                          "&newValue="+isChecked,function(data){
+                                              // do something with the response
+                                          });
+
+       });
+    });
+</script>
+
+<style>
+    td {
+        padding: 5px;
+    }
+    th {
+        padding: 5px;
+    }
+</style>
+
+@if (Model != null)
+{
+<table id="AccountPayableTable" class="tablesorter">
+    <thead>
+        <tr>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Category</th>
+            <th>Band Contact</th>
+            <th>Person Contact</th>
+            <th>Venue Contact</th>
+            <th>Paid</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (test.Models.Budget.AccountPayables accountPayable in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(ModelItem => accountPayable.Amount)</td>
+                <td>@accountPayable.Date.ToShortDateString()</td>
+                <td>@Html.DisplayFor(ModelItem => accountPayable.Category)</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(accountPayable.AssociatedBandName))
+                    {
+                    @Html.ActionLink(accountPayable.AssociatedBandName, "EditContact", "Rolodex", new {bandId = ViewBag.BandId, contactId = accountPayable.AssociatedBandContactId, type = test.Models.Rolodex.ContactType.Band}, new { })
+                    }
+                </td>
+                <td>
+                    @if (!string.IsNullOrEmpty(accountPayable.AssociatedPersonName))
+                    {
+                    @Html.ActionLink(accountPayable.AssociatedPersonName, "EditContact", "Rolodex", new {bandId = ViewBag.BandId, contactId = accountPayable.AssociatedPersonContactId, type = test.Models.Rolodex.ContactType.People}, new { })
+                    }
+                    </td>
+                <td>
+                    @if (!string.IsNullOrEmpty(accountPayable.AssociatedVenueName))
+                    {
+                    @Html.ActionLink(accountPayable.AssociatedVenueName, "EditContact", "Rolodex", new {bandId = ViewBag.BandId, contactId = accountPayable.AssociatedVenueContactId, type = test.Models.Rolodex.ContactType.Venue}, new { })
+                    }
+
+                </td>
+                <td>@Html.CheckBoxFor(ModelItem => accountPayable.Paid, new { @id=accountPayable.AccountPayableId, @class="chks"})</td>
+            </tr>
+        }   
+    </tbody>
+</table>
+}

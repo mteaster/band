@@ -1,0 +1,31 @@
+﻿@model test.Models.Budget.Merchandise
+
+@{
+    ViewBag.Title = "AddMerch";
+}
+
+@section featured 
+{
+    @Html.Partial("_BandHeaderPartial")
+}
+
+@using (Html.BeginForm("AddMerch", "Budget", new { bandId = ViewBag.BandId }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+    <ol>
+        <li>
+            @Html.LabelFor(m => m.Name)
+            @Html.TextBoxFor(m => m.Name)
+        </li>
+        <li>
+            @Html.LabelFor(m => m.Category)
+            @Html.TextBoxFor(m => m.Category)
+        </li>
+        <li>
+            @Html.LabelFor(m => m.Size)
+            @Html.TextBoxFor(m => m.Size)
+        </li>
+    </ol>
+        <input type="submit" value="Save" />
+}

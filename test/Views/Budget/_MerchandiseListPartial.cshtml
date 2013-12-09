@@ -1,0 +1,43 @@
+﻿@model IEnumerable<test.Models.Budget.Merchandise>
+<script type="text/javascript" src="../../Scripts/jquery.tablesorter.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#MerchTable").tablesorter();
+    }
+);
+</script>
+
+<style>
+    td {
+        padding: 5px;
+    }
+    th {
+        padding: 5px;
+    }
+</style>
+@if (Model != null)
+{
+<table id="MerchTable" class="tablesorter">
+    <thead>
+        <tr>
+            <th>Design Name</th>
+            <th>Category</th>
+            <th>Size</th>
+            <th> </th>
+            <th> </th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (test.Models.Budget.Merchandise merchlist in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(ModelItem => merchlist.Name)</td>
+            <td>@Html.DisplayFor(ModelItem => merchlist.Category)</td>
+            <td>@Html.DisplayFor(ModelItem => merchlist.Size)</td>
+            <td>@Html.ActionLink("Edit", "EditMerch", new {bandId = ViewBag.BandID, merchId = merchlist.MerchandiseId})</td>
+            <td>@Html.ActionLink("Delete", "DeleteMerch", new {bandId = ViewBag.BandID, merchId = merchlist.MerchandiseId, filters = ViewBag.Filters})</td>
+        </tr>
+    }   
+    </tbody>
+</table>
+}

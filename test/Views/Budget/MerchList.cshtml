@@ -1,0 +1,36 @@
+﻿@model test.Models.Budget.MerchFilters
+
+
+<script>
+    function submitform() {
+        $('form').submit();
+    }
+</script>
+
+@section featured 
+{
+    @Html.Partial("_BandHeaderPartial")
+}
+
+
+@Html.ActionLink("Manage Accounts", "Index", new {bandId = ViewBag.BandId})
+@Html.ActionLink("Enter New Merch", "AddMerch", new {bandId = ViewBag.BandId})
+
+@using (Html.BeginForm("MerchList", "Budget", new { bandId = ViewBag.BandId}))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+    <fieldset>
+        <legend>Filters</legend>
+        Design Name: 
+        @Html.TextBoxFor(m => m.Name, new {@onchange = "submitform();", style="width: 150px" })
+        Category: 
+        @Html.TextBoxFor(m => m.Category, new {@onchange = "submitform();", style="width: 150px" })
+        Size: 
+        @Html.TextBoxFor(m => m.Size, new {@onchange = "submitform();", style="width: 150px" })
+
+    </fieldset>
+    
+
+}
+@{ Html.RenderAction("MerchandiseList", new {bandId = ViewBag.BandId, filters = ViewBag.Filters}); }

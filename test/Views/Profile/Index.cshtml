@@ -1,0 +1,95 @@
+﻿@model test.Models.Test.BandBioModel
+
+@{
+    ViewBag.Page = "Profile";
+    ViewBag.Title = ViewBag.Page + " - " + ViewBag.BandName;
+}
+
+@if (ViewBag.InBand)
+{
+    @section featured 
+    {
+        @Html.Partial("_BandHeaderPartial")
+    }
+}
+else
+{
+    @section featured
+    {
+        @Html.Partial("_TestHeaderPartial")
+    }
+}
+
+<section class="blarg">
+    <h2 class="five">Bio</h2>
+
+    <p class="message-success">@ViewBag.BioSuccessMessage</p>
+    <p class="message-error">@ViewBag.BioErrorMessage</p>
+
+    @if (ViewBag.InBand)
+    {
+        @Html.ActionLink("Edit Bio", "EditBio", "Profile", new { bandId = ViewBag.BandId } )
+        <br /><br />
+    }
+
+    @if (Model == null || Model.Bio.IsEmpty())
+    {
+        <span>No bio for this band</span>
+    }
+    else
+    {
+        <div class="whitebox">
+            @Html.Raw(Model.Bio)
+        </div>
+    }
+</section>
+
+<section class="half">
+    <h2 class="five">Tracks</h2>
+
+    <p class="message-success">@ViewBag.TracksSuccessMessage</p>
+    <p class="message-error">@ViewBag.TracksErrorMessage</p>
+
+    <div ng-app="super" ng-controller="SortableController" ng-init="init('/Profile/GetTracks/@ViewBag.BandId')" ng-cloak>
+        @if (ViewBag.InBand)
+        {
+            @Html.ActionLink("Upload Track", "UploadTrack", "Profile", new { bandId = ViewBag.BandId } )
+            <br /><br />
+        }
+        
+        <span ng-show="ready && empty">No tracks for this band</span>
+        
+        <div ng-show="ready && !empty">
+            <input type="button" value="Sort" ng-click="sort('TrackName')"/>
+            <ol class="messages">
+                <li ng-repeat="track in data | orderBy : column : descending">
+                    <div class="post-header">  
+                        <!-- <img class="post-avatar" height="50" width="50" class="photo" alt="" ng-src="{{ track.ImageUrl }}" /> --> 
+                        <div class="post-info">  
+                            <span class="post-username">{{ track.TrackName }}</span><br />
+                            <span class="post-time">{{ track.AlbumName }}</span><br />
+                        </div>
+                    </div>
+
+                    <div class="post-content">
+                        <audio controls>
+                            <source ng-src="{{ track.TrackUrl }}" type="audio/mp3" />
+                            <p>Your browser does not support HTML 5 audio element</p>
+                        </audio>
+                    </div>
+
+                    @if (ViewBag.InBand)
+                    {
+                        <a class="post-link" ng-href="/Profile/DeleteTrack/{{ track.TrackId }}">Delete</a>
+                    }
+                </li>
+            </ol>
+        </div>
+    </div>
+</section>
+
+@section Scripts
+{
+    <script type="text/javascript" src="@Url.Content("/Scripts/angular.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("/Scripts/super.js")"></script>
+}

@@ -1,0 +1,15 @@
+﻿@model test.Models.Test.BandBioModel
+
+@using (Html.BeginForm("EditBio", "Profile", new { bandId = ViewBag.BandId }, FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <fieldset>
+        <legend>Edit Bio Form</legend>
+         
+        @Html.EditorFor(model => model.Bio)
+    
+        <br />
+        <input type="submit" value="Save" />
+    </fieldset>
+}
