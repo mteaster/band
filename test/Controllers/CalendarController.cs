@@ -79,6 +79,11 @@ namespace band.Controllers
                 if(model.EventPeriod.ToUpper() == "PM")
                 {
                     actualHour += 12;
+
+                    if (actualHour == 24)
+                    {
+                        actualHour = 0;
+                    }
                 }
                 else if (actualHour == 12)
                 {
@@ -94,7 +99,7 @@ namespace band.Controllers
                     database.SaveChanges();
                 }
 
-                TempData["SuccessMessage"] = "we added an event";
+                TempData["SuccessMessage"] = "Event added.";
                 return RedirectToAction("Index", new { bandId = bandId });
             }
 
@@ -151,7 +156,7 @@ namespace band.Controllers
                     database.SaveChanges();
                 }
 
-                TempData["SuccessMessage"] = "we edited ur calendar event LOL";
+                TempData["SuccessMessage"] = "Your event has been edited.";
                 return RedirectToAction("Index", new { bandId = bandId });
             }
 
